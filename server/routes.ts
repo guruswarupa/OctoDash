@@ -1,0 +1,266 @@
+import type { Express } from "express";
+import { createServer, type Server } from "http";
+import { WebSocketServer, WebSocket } from "ws";
+import { storage } from "./storage";
+import { OctoPrintClient } from "./octoprint";
+import { z } from "zod";
+
+let octoprintClient: OctoPrintClient | null = null;
+
+function getClient(): OctoPrintClient {
+  if (!octoprintClient) {
+    throw new Error("OctoPrint client not initialized. Configure connection settings first.");
+  }
+  return octoprintClient;
+}
+
+export async function registerRoutes(app: Express): Promise<Server> {
+  const httpServer = createServer(app);
+  const wss = new WebSocketServer({ server: httpServer, path: "/ws" });
+
+  // Initialize OctoPrint client from settings
+  const settings = await storage.getConnectionSettings();
+  if (settings && settings.apiKey) {
+    try {
+      octoprintClient = new OctoPrintClient(settings.serverUrl, settings.apiKey);
+      console.log(`OctoPrint client initialized for ${settings.serverUrl}`);
+    } catch (error) {
+      console.error("Failed to initialize OctoPrint client:", error);
+    }
+  }
+
+  // WebSocket connection for real-time updates
+  wss.on("connection", (ws: WebSocket) => {
+    console.log("WebSocket client connected");
+    
+    let updateInterval: NodeJS.Timeout | null = null;
+
+    const sendUpdate = async () => {
+      if (!octoprintClient) return;
+      
+      try {
+        const [status, job] = await Promise.all([
+          octoprintClient.getPrinterStatus(),
+          octoprintClient.getJob(),
+        ]);
+        
+        ws.send(JSON.stringify({
+          type: "update",
+          data: { status, job },
+        }));
+      } catch (error) {
+        console.error("Error fetching printer data:", error);
+      }
+    };
+
+    // Send updates every 2 seconds
+    updateInterval = setInterval(sendUpdate, 2000);
+    sendUpdate(); // Send initial update
+
+    ws.on("close", () => {
+      console.log("WebSocket client disconnected");
+      if (updateInterval) clearInterval(updateInterval);
+    });
+  });
+
+  // Connection settings
+  app.get("/api/settings", async (req, res) => {
+    const settings = await storage.getConnectionSettings();
+    res.json(settings || {});
+  });
+
+  app.post("/api/settings", async (req, res) => {
+    try {
+      const settings = req.body;
+      await storage.saveConnectionSettings(settings);
+      
+      // Reinitialize client
+      octoprintClient = new OctoPrintClient(settings.serverUrl, settings.apiKey);
+      const connected = await octoprintClient.testConnection();
+      
+      res.json({ success: true, connected });
+    } catch (error) {
+      res.status(400).json({ error: "Failed to save settings" });
+    }
+  });
+
+  // Test connection
+  app.get("/api/connection/test", async (req, res) => {
+    try {
+      const client = getClient();
+      const connected = await client.testConnection();
+      res.json({ connected });
+    } catch (error) {
+      res.json({ connected: false });
+    }
+  });
+
+  // Printer status
+  app.get("/api/printer/status", async (req, res) => {
+    try {
+      const client = getClient();
+      const status = await client.getPrinterStatus();
+      res.json(status);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Job information
+  app.get("/api/job", async (req, res) => {
+    try {
+      const client = getClient();
+      const job = await client.getJob();
+      res.json(job);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Job control
+  app.post("/api/job/start", async (req, res) => {
+    try {
+      const client = getClient();
+      await client.startJob();
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/job/pause", async (req, res) => {
+    try {
+      const client = getClient();
+      await client.pauseJob();
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/job/resume", async (req, res) => {
+    try {
+      const client = getClient();
+      await client.resumeJob();
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/job/cancel", async (req, res) => {
+    try {
+      const client = getClient();
+      await client.cancelJob();
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Files
+  app.get("/api/files", async (req, res) => {
+    try {
+      const client = getClient();
+      const location = (req.query.location as string) || "local";
+      const files = await client.getFiles(location);
+      res.json(files);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/files/select", async (req, res) => {
+    try {
+      const client = getClient();
+      const { location, path, print } = req.body;
+      await client.selectFile(location, path, print);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.delete("/api/files/:location/:path(*)", async (req, res) => {
+    try {
+      const client = getClient();
+      const { location, path } = req.params;
+      await client.deleteFile(location, path);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Temperature control
+  app.post("/api/printer/tool/target", async (req, res) => {
+    try {
+      const client = getClient();
+      const { temp, tool } = req.body;
+      await client.setToolTemperature(temp, tool || 0);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/printer/bed/target", async (req, res) => {
+    try {
+      const client = getClient();
+      const { temp } = req.body;
+      await client.setBedTemperature(temp);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Movement
+  app.post("/api/printer/jog", async (req, res) => {
+    try {
+      const client = getClient();
+      const { axes } = req.body;
+      await client.jog(axes);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/printer/home", async (req, res) => {
+    try {
+      const client = getClient();
+      const { axes } = req.body;
+      await client.home(axes);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Extruder
+  app.post("/api/printer/extrude", async (req, res) => {
+    try {
+      const client = getClient();
+      const { amount } = req.body;
+      await client.extrude(amount);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // G-code commands
+  app.post("/api/printer/command", async (req, res) => {
+    try {
+      const client = getClient();
+      const { command } = req.body;
+      await client.sendGcode(command);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  return httpServer;
+}
