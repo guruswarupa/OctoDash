@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import FormData from "form-data";
 import type {
   PrinterStatus,
   Job,
@@ -126,5 +127,71 @@ export class OctoPrintClient {
     } catch {
       return false;
     }
+  }
+
+  // File upload
+  async uploadFile(fileBuffer: Buffer, filename: string, location: string = "local"): Promise<any> {
+    const formData = new FormData();
+    formData.append("file", fileBuffer, filename);
+    
+    const res = await this.client.post(`/files/${location}`, formData, {
+      headers: formData.getHeaders(),
+    });
+    return res.data;
+  }
+
+  // System commands
+  async shutdown() {
+    await this.client.post("/system/commands/core/shutdown");
+  }
+
+  async reboot() {
+    await this.client.post("/system/commands/core/reboot");
+  }
+
+  async restartOctoPrint() {
+    await this.client.post("/system/commands/core/restart");
+  }
+
+  // Fan control
+  async setFanSpeed(speed: number) {
+    // Speed: 0-255
+    const command = speed === 0 ? "M106 S0" : `M106 S${Math.round(speed)}`;
+    await this.sendGcode(command);
+  }
+
+  // Speed and flow rate
+  async setFeedrate(percentage: number) {
+    await this.sendGcode(`M220 S${percentage}`);
+  }
+
+  async setFlowrate(percentage: number) {
+    await this.sendGcode(`M221 S${percentage}`);
+  }
+
+  // Timelapse
+  async getTimelapses() {
+    const res = await this.client.get("/timelapse");
+    return res.data;
+  }
+
+  async deleteTimelapse(filename: string) {
+    await this.client.delete(`/timelapse/${filename}`);
+  }
+
+  async getTimelapseConfig() {
+    const res = await this.client.get("/timelapse/config");
+    return res.data;
+  }
+
+  async setTimelapseConfig(config: any) {
+    const res = await this.client.post("/timelapse/config", config);
+    return res.data;
+  }
+
+  // Get webcam settings
+  async getSettings() {
+    const res = await this.client.get("/settings");
+    return res.data;
   }
 }
