@@ -5,6 +5,8 @@ import {
   Terminal,
   Thermometer,
   Home,
+  Camera,
+  Video,
 } from "lucide-react";
 import {
   Sidebar,
@@ -39,6 +41,16 @@ const menuItems = [
     title: "Files",
     url: "/files",
     icon: FileText,
+  },
+  {
+    title: "Camera",
+    url: "/webcam",
+    icon: Camera,
+  },
+  {
+    title: "Timelapse",
+    url: "/timelapse",
+    icon: Video,
   },
   {
     title: "Terminal",

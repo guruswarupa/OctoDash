@@ -3,12 +3,24 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Power, RotateCcw, RefreshCw, AlertTriangle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { api } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import type { ConnectionSettings } from "@shared/schema";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function Settings() {
   const { toast } = useToast();
@@ -34,6 +46,24 @@ export default function Settings() {
       queryClient.invalidateQueries({ queryKey: ["/api/settings"] });
     },
     onError: () => toast({ title: "Failed to save settings", variant: "destructive" }),
+  });
+
+  const shutdownMutation = useMutation({
+    mutationFn: api.shutdown,
+    onSuccess: () => toast({ title: "Shutdown initiated" }),
+    onError: () => toast({ title: "Failed to shutdown", variant: "destructive" }),
+  });
+
+  const rebootMutation = useMutation({
+    mutationFn: api.reboot,
+    onSuccess: () => toast({ title: "Reboot initiated" }),
+    onError: () => toast({ title: "Failed to reboot", variant: "destructive" }),
+  });
+
+  const restartMutation = useMutation({
+    mutationFn: api.restartOctoPrint,
+    onSuccess: () => toast({ title: "OctoPrint restart initiated" }),
+    onError: () => toast({ title: "Failed to restart OctoPrint", variant: "destructive" }),
   });
 
   return (
@@ -104,6 +134,82 @@ export default function Settings() {
               <span className="text-muted-foreground">Interface Version:</span>
               <span className="font-mono font-medium">1.0.0</span>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5" />
+              System Commands
+            </CardTitle>
+            <CardDescription>Control your Raspberry Pi system</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline" className="w-full justify-start" size="lg" data-testid="button-restart-octoprint">
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Restart OctoPrint
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Restart OctoPrint?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will restart the OctoPrint service. Any active print will be paused.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => restartMutation.mutate()}>Restart</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline" className="w-full justify-start" size="lg" data-testid="button-reboot">
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  Reboot System
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Reboot System?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will reboot the Raspberry Pi. Any active print will be stopped.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => rebootMutation.mutate()}>Reboot</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" className="w-full justify-start" size="lg" data-testid="button-shutdown">
+                  <Power className="mr-2 h-4 w-4" />
+                  Shutdown System
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Shutdown System?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will shutdown the Raspberry Pi completely. You will need to power it on manually.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => shutdownMutation.mutate()} className="bg-destructive text-destructive-foreground">
+                    Shutdown
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </CardContent>
         </Card>
       </div>

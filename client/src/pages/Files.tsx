@@ -33,6 +33,15 @@ export default function Files() {
     onError: () => toast({ title: "Failed to delete file", variant: "destructive" }),
   });
 
+  const uploadMutation = useMutation({
+    mutationFn: (file: File) => api.uploadFile(file),
+    onSuccess: () => {
+      toast({ title: "File uploaded successfully" });
+      queryClient.invalidateQueries({ queryKey: ["/api/files"] });
+    },
+    onError: () => toast({ title: "Failed to upload file", variant: "destructive" }),
+  });
+
   const files = (filesData?.files || [])
     .filter((f) => f.type === "machinecode")
     .map((f) => ({
@@ -57,6 +66,19 @@ export default function Files() {
     }
   };
 
+  const handleUpload = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".gcode,.gco,.g";
+    input.onchange = (e: Event) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        uploadMutation.mutate(file);
+      }
+    };
+    input.click();
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -68,7 +90,7 @@ export default function Files() {
         files={files}
         onPrint={handlePrint}
         onDelete={handleDelete}
-        onUpload={() => toast({ title: "Upload not yet implemented" })}
+        onUpload={handleUpload}
       />
     </div>
   );

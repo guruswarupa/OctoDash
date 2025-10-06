@@ -88,4 +88,81 @@ export const api = {
     const res = await apiRequest("POST", "/api/printer/command", { command });
     return res.json();
   },
+
+  // File upload (uses fetch directly to support FormData)
+  async uploadFile(file: File, location: string = "local") {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("location", location);
+    const res = await fetch("/api/files/upload", {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+    });
+    if (!res.ok) {
+      const text = (await res.text()) || res.statusText;
+      throw new Error(`${res.status}: ${text}`);
+    }
+    return res.json();
+  },
+
+  // System commands
+  async shutdown() {
+    const res = await apiRequest("POST", "/api/system/shutdown");
+    return res.json();
+  },
+
+  async reboot() {
+    const res = await apiRequest("POST", "/api/system/reboot");
+    return res.json();
+  },
+
+  async restartOctoPrint() {
+    const res = await apiRequest("POST", "/api/system/restart");
+    return res.json();
+  },
+
+  // Fan control
+  async setFanSpeed(speed: number) {
+    const res = await apiRequest("POST", "/api/printer/fan", { speed });
+    return res.json();
+  },
+
+  // Speed and flow control
+  async setFeedrate(percentage: number) {
+    const res = await apiRequest("POST", "/api/printer/feedrate", { percentage });
+    return res.json();
+  },
+
+  async setFlowrate(percentage: number) {
+    const res = await apiRequest("POST", "/api/printer/flowrate", { percentage });
+    return res.json();
+  },
+
+  // Timelapse
+  async getTimelapses() {
+    const res = await apiRequest("GET", "/api/timelapse");
+    return res.json();
+  },
+
+  async deleteTimelapse(filename: string) {
+    const res = await apiRequest("DELETE", `/api/timelapse/${filename}`);
+    return res.json();
+  },
+
+  async getTimelapseConfig() {
+    const res = await apiRequest("GET", "/api/timelapse/config");
+    return res.json();
+  },
+
+  async setTimelapseConfig(config: any) {
+    const res = await apiRequest("POST", "/api/timelapse/config", config);
+    return res.json();
+  },
+
+  // Webcam
+  async getWebcamUrl() {
+    const res = await apiRequest("GET", "/api/webcam/url");
+    return res.json();
+  },
 };

@@ -4,6 +4,11 @@ import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { OctoPrintClient } from "./octoprint";
 import { z } from "zod";
+import multer from "multer";
+import fs from "fs";
+
+// Use memory storage to avoid filesystem dependencies
+const upload = multer({ storage: multer.memoryStorage() });
 
 let octoprintClient: OctoPrintClient | null = null;
 
@@ -257,6 +262,145 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { command } = req.body;
       await client.sendGcode(command);
       res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // File upload
+  app.post("/api/files/upload", upload.single("file"), async (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+    
+    try {
+      const client = getClient();
+      // With memoryStorage, file buffer is already in memory
+      await client.uploadFile(req.file.buffer, req.file.originalname, req.body.location || "local");
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // System commands
+  app.post("/api/system/shutdown", async (req, res) => {
+    try {
+      const client = getClient();
+      await client.shutdown();
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/system/reboot", async (req, res) => {
+    try {
+      const client = getClient();
+      await client.reboot();
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/system/restart", async (req, res) => {
+    try {
+      const client = getClient();
+      await client.restartOctoPrint();
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Fan control
+  app.post("/api/printer/fan", async (req, res) => {
+    try {
+      const client = getClient();
+      const { speed } = req.body;
+      await client.setFanSpeed(speed);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Speed and flow control
+  app.post("/api/printer/feedrate", async (req, res) => {
+    try {
+      const client = getClient();
+      const { percentage } = req.body;
+      await client.setFeedrate(percentage);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/printer/flowrate", async (req, res) => {
+    try {
+      const client = getClient();
+      const { percentage } = req.body;
+      await client.setFlowrate(percentage);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Timelapse
+  app.get("/api/timelapse", async (req, res) => {
+    try {
+      const client = getClient();
+      const timelapses = await client.getTimelapses();
+      res.json(timelapses);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.delete("/api/timelapse/:filename", async (req, res) => {
+    try {
+      const client = getClient();
+      const { filename } = req.params;
+      await client.deleteTimelapse(filename);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/timelapse/config", async (req, res) => {
+    try {
+      const client = getClient();
+      const config = await client.getTimelapseConfig();
+      res.json(config);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/timelapse/config", async (req, res) => {
+    try {
+      const client = getClient();
+      const config = req.body;
+      const result = await client.setTimelapseConfig(config);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Webcam
+  app.get("/api/webcam/url", async (req, res) => {
+    try {
+      const client = getClient();
+      const settings = await client.getSettings();
+      res.json({
+        streamUrl: settings.webcam?.streamUrl || "",
+        snapshotUrl: settings.webcam?.snapshotUrl || "",
+      });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
