@@ -395,31 +395,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Webcam
   app.get("/api/webcam/url", async (req, res) => {
     try {
-      const client = getClient();
-      const settings = await client.getSettings();
-
-      // Get the OctoPrint server URL from storage
-      const connectionSettings = await storage.getConnectionSettings();
-      const serverUrl = connectionSettings?.serverUrl || "";
-
-      // Convert relative URLs to absolute URLs
-      const makeAbsoluteUrl = (url: string, defaultPath: string) => {
-        if (!url || url.trim() === "") {
-          return `${serverUrl.replace(/\/$/, "")}${defaultPath}`;
-        }
-
-        if (url.startsWith("http://") || url.startsWith("https://")) {
-          return url;
-        }
-
-        const baseUrl = serverUrl.replace(/\/$/, "");
-        const path = url.startsWith("/") ? url : `/${url}`;
-        return `${baseUrl}${path}`;
-      };
 
       res.json({
-        streamUrl: makeAbsoluteUrl(settings.webcam?.streamUrl, "/webcam/?action=stream"),
-        snapshotUrl: makeAbsoluteUrl(settings.webcam?.snapshotUrl, ":8080/?action=snapshot"),
+        streamUrl: "http://localhost/webcam/?action=stream",
+        snapshotUrl: "http://localhost:8080/?action=snapshot",
       });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
