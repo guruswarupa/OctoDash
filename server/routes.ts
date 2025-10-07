@@ -397,9 +397,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const client = getClient();
       const settings = await client.getSettings();
+      
+      // Get the OctoPrint server URL from storage
+      const connectionSettings = await storage.getConnectionSettings();
+      const serverUrl = connectionSettings?.serverUrl || "";
+      
+      // Convert relative URLs to absolute URLs
+      const makeAbsoluteUrl = (url: string) => {
+        if (!url) return "";
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+          return url;
+        }
+        // Remove trailing slash from server URL and leading slash from webcam URL
+        const baseUrl = serverUrl.replace(/\/$/, "");
+        const path = url.startsWith("/") ? url : `/${url}`;
+        return `${baseUrl}${path}`;
+      };
+      
       res.json({
-        streamUrl: settings.webcam?.streamUrl || "",
-        snapshotUrl: settings.webcam?.snapshotUrl || "",
+        streamUrl: makeAbsoluteUrl(settings.webcam?.streamUrl || ""),
+        snapshotUrl: makeAbsoluteUrl(settings.webcam?.snapshotUrl || ""),
       });
     } catch (error: any) {
       res.status(500).json({ error: error.message });

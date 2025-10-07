@@ -23,14 +23,11 @@ export class OctoPrintClient {
   }
 
   async getPrinterStatus(): Promise<PrinterStatus> {
-    const [stateRes, tempRes] = await Promise.all([
-      this.client.get("/printer"),
-      this.client.get("/printer/printhead"),
-    ]);
+    const res = await this.client.get("/printer");
 
     return {
-      state: stateRes.data.state,
-      temperature: stateRes.data.temperature,
+      state: res.data.state,
+      temperature: res.data.temperature,
     };
   }
 
