@@ -240,9 +240,12 @@
   }
 
   @media (max-width: 800px) {
+    * {
+      cursor: none;            /* Hide cursor */
+    }
+
     body {
       overflow: hidden;        /* No scrollbars */
-      cursor: none;            /* Hide cursor */
     }
   }
 
