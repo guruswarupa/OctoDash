@@ -33,13 +33,10 @@ cat > ~/.config/lxsession/LXDE/autostart << 'EOF'
 @xset s noblank
 
 # Hide mouse cursor when idle
-@unclutter -idle 0.5 -root
-
-# Wait for network to be ready
-@bash -c 'sleep 5'
+@unclutter -idle 0
 
 # Launch OctoPrint Control Interface in Chromium kiosk mode
-@chromium-browser --noerrdialogs --disable-infobars --kiosk http://localhost:4000
+@chromium-browser --kiosk --app=http://localhost:4000
 EOF
 
 echo "Autostart configuration created at ~/.config/lxsession/LXDE/autostart"
