@@ -55,13 +55,13 @@ export default function Timelapse() {
   const timelapseFiles = timelapses?.files || [];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold" data-testid="heading-timelapse">Timelapse</h1>
-        <p className="text-muted-foreground">Manage timelapses and configuration</p>
+        <h1 className="text-2xl sm:text-3xl font-bold" data-testid="heading-timelapse">Timelapse</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">Manage timelapses and configuration</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-3 sm:gap-4 md:gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">

@@ -41,15 +41,15 @@ function AppContent() {
   return (
     <div className="flex h-screen w-full">
       <AppSidebar />
-      <div className="flex flex-col flex-1">
-        <header className="flex items-center justify-between p-4 border-b">
-          <div className="flex items-center gap-4">
+      <div className="flex flex-col flex-1 min-w-0">
+        <header className="flex items-center justify-between p-2 sm:p-4 border-b gap-2">
+          <div className="flex items-center gap-2 sm:gap-4 min-w-0">
             <SidebarTrigger data-testid="button-sidebar-toggle" />
             <ConnectionStatus isConnected={isConnected} />
           </div>
           <ThemeToggle />
         </header>
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto p-3 sm:p-4 md:p-6">
           <Router />
         </main>
       </div>
@@ -67,7 +67,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <ThemeProvider defaultTheme="dark">
-          <SidebarProvider style={style as React.CSSProperties}>
+          <SidebarProvider style={style as React.CSSProperties} defaultOpen={false}>
             <AppContent />
           </SidebarProvider>
           <Toaster />

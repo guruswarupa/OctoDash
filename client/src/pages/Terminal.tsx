@@ -31,10 +31,10 @@ export default function Terminal() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold" data-testid="heading-terminal">Terminal</h1>
-        <p className="text-muted-foreground">Send G-code commands directly to your printer</p>
+        <h1 className="text-2xl sm:text-3xl font-bold" data-testid="heading-terminal">Terminal</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">Send G-code commands directly to your printer</p>
       </div>
 
       <TerminalView messages={messages} onSendCommand={handleSendCommand} />

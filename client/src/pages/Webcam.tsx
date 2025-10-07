@@ -57,12 +57,12 @@ export default function Webcam() {
   }, [webcamData]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold" data-testid="heading-webcam">
+        <h1 className="text-2xl sm:text-3xl font-bold" data-testid="heading-webcam">
           Camera
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm sm:text-base text-muted-foreground">
           Monitor your printer's camera feed
         </p>
       </div>
@@ -77,7 +77,7 @@ export default function Webcam() {
         </CardHeader>
         <CardContent>
           {isLoading || isTesting ? (
-            <div className="flex items-center justify-center h-96 bg-muted rounded-lg">
+            <div className="flex items-center justify-center h-64 md:h-96 bg-muted rounded-lg">
               <p className="text-muted-foreground">Loading camera...</p>
             </div>
           ) : !streamUrl ? (

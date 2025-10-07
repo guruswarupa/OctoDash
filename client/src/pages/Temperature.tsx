@@ -21,13 +21,13 @@ export default function Temperature() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold" data-testid="heading-temperature">Temperature</h1>
-        <p className="text-muted-foreground">Monitor and control printer temperatures</p>
+        <h1 className="text-2xl sm:text-3xl font-bold" data-testid="heading-temperature">Temperature</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">Monitor and control printer temperatures</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-3 sm:gap-4 md:gap-6 lg:grid-cols-2">
         <TemperatureControl
           type="hotend"
           currentTemp={Math.round(status?.temperature.tool0?.actual || 0)}
