@@ -406,12 +406,15 @@ function getLocalIp(): string {
 
 app.get("/api/webcam/url", async (req, res) => {
   try {
-    const ip = getLocalIp();
+    const ip = getLocalIp(); // e.g., 192.168.0.150
     res.json({
-      streamUrl: `http://${ip}/webcam/?action=stream`,
+      streamUrl: `http://${ip}:8080/?action=stream`,
       snapshotUrl: `http://${ip}:8080/?action=snapshot`,
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
+
+  return httpServer;
+}
