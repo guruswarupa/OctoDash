@@ -37,18 +37,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // WebSocket connection for real-time updates
   wss.on("connection", (ws: WebSocket) => {
     console.log("WebSocket client connected");
-    
+
     let updateInterval: NodeJS.Timeout | null = null;
 
     const sendUpdate = async () => {
       if (!octoprintClient) return;
-      
+
       try {
         const [status, job] = await Promise.all([
           octoprintClient.getPrinterStatus(),
           octoprintClient.getJob(),
         ]);
-        
+
         ws.send(JSON.stringify({
           type: "update",
           data: { status, job },
@@ -78,11 +78,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const settings = req.body;
       await storage.saveConnectionSettings(settings);
-      
+
       // Reinitialize client
       octoprintClient = new OctoPrintClient(settings.serverUrl, settings.apiKey);
       const connected = await octoprintClient.testConnection();
-      
+
       res.json({ success: true, connected });
     } catch (error) {
       res.status(400).json({ error: "Failed to save settings" });
@@ -272,7 +272,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
-    
+
     try {
       const client = getClient();
       // With memoryStorage, file buffer is already in memory
@@ -397,26 +397,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const client = getClient();
       const settings = await client.getSettings();
-      
+
       // Get the OctoPrint server URL from storage
       const connectionSettings = await storage.getConnectionSettings();
       const serverUrl = connectionSettings?.serverUrl || "";
-      
+
       // Convert relative URLs to absolute URLs
-      const makeAbsoluteUrl = (url: string) => {
-        if (!url) return "";
+      const makeAbsoluteUrl = (url: string, defaultPath: string) => {
+        if (!url || url.trim() === "") {
+          return `${serverUrl.replace(/\/$/, "")}${defaultPath}`;
+        }
+
         if (url.startsWith("http://") || url.startsWith("https://")) {
           return url;
         }
-        // Remove trailing slash from server URL and leading slash from webcam URL
+
         const baseUrl = serverUrl.replace(/\/$/, "");
         const path = url.startsWith("/") ? url : `/${url}`;
         return `${baseUrl}${path}`;
       };
-      
+
       res.json({
-        streamUrl: makeAbsoluteUrl(settings.webcam?.streamUrl || ""),
-        snapshotUrl: makeAbsoluteUrl(settings.webcam?.snapshotUrl || ""),
+        streamUrl: makeAbsoluteUrl(settings.webcam?.streamUrl, ":8080/?action=stream"),
+        snapshotUrl: makeAbsoluteUrl(settings.webcam?.snapshotUrl, ":8080/?action=snapshot"),
       });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
