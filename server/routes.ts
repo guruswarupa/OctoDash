@@ -408,7 +408,7 @@ app.get("/api/webcam/url", async (req, res) => {
   try {
     const ip = getLocalIp(); // e.g., 192.168.0.150
     res.json({
-      streamUrl: `http://${ip}:8080/?action=stream`,
+      streamUrl: `http://${ip}/webcam/?action=stream`,
       snapshotUrl: `http://${ip}:8080/?action=snapshot`,
     });
   } catch (error: any) {
