@@ -237,7 +237,13 @@
 @layer base {
   * {
     @apply border-border;
-    cursor: none;
+  }
+
+  @media (max-width: 800px) {
+    body {
+      overflow: hidden;        /* No scrollbars */
+      cursor: none;            /* Hide cursor */
+    }
   }
 
   body {
