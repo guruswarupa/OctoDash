@@ -3,7 +3,6 @@ import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { OctoPrintClient } from "./octoprint";
-import { z } from "zod";
 import multer from "multer";
 import os from "os";
 
@@ -392,24 +391,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-function getLocalIp(): string {
-  const interfaces = os.networkInterfaces();
-  for (const iface of Object.values(interfaces)) {
-    for (const config of iface || []) {
-      if (config.family === "IPv4" && !config.internal) {
-        return config.address;
-      }
-    }
-  }
-  return "localhost";
-}
-
 app.get("/api/webcam/url", async (req, res) => {
   try {
-    const ip = getLocalIp(); // e.g., 192.168.0.150
+    const interfaces = os.networkInterfaces();
+
+    let localIp: string | null = null;
+    let tailscaleIp: string | null = null;
+
+    for (const iface of Object.values(interfaces)) {
+      for (const config of iface || []) {
+        if (config.family === "IPv4" && !config.internal) {
+          if (config.address.startsWith("192.") || config.address.startsWith("10.")) {
+            localIp = config.address;
+          } else if (config.address.startsWith("100.")) {
+            tailscaleIp = config.address;
+          }
+        }
+      }
+    }
+
     res.json({
-      streamUrl: `http://${ip}/webcam/?action=stream`,
-      snapshotUrl: `http://${ip}:8080/?action=snapshot`,
+      localStreamUrl: localIp ? `http://${localIp}/webcam/?action=stream` : null,
+      tailscaleStreamUrl: tailscaleIp ? `http://${tailscaleIp}/webcam/?action=stream` : null,
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message });

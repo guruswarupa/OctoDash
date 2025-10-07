@@ -1,5 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { api } from "@/lib/api";
 import { AlertCircle, Camera } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -10,14 +17,54 @@ export default function Webcam() {
     queryFn: api.getWebcamUrl,
   });
 
-  const streamUrl = webcamData?.streamUrl || "";
-  const hasWebcam = !!streamUrl;
+  const [streamUrl, setStreamUrl] = useState<string | null>(null);
+  const [isTesting, setIsTesting] = useState(true);
+
+  useEffect(() => {
+    if (!webcamData) return;
+
+    const testImage = (url: string): Promise<boolean> => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+      });
+    };
+
+    const testUrls = async () => {
+      setIsTesting(true);
+
+      const urls = [
+        webcamData.localStreamUrl,
+        webcamData.tailscaleStreamUrl,
+      ].filter(Boolean) as string[];
+
+      for (const url of urls) {
+        const works = await testImage(url);
+        if (works) {
+          setStreamUrl(url);
+          setIsTesting(false);
+          return;
+        }
+      }
+
+      setStreamUrl(null);
+      setIsTesting(false);
+    };
+
+    testUrls();
+  }, [webcamData]);
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold" data-testid="heading-webcam">Camera</h1>
-        <p className="text-muted-foreground">Monitor your printer's camera feed</p>
+        <h1 className="text-3xl font-bold" data-testid="heading-webcam">
+          Camera
+        </h1>
+        <p className="text-muted-foreground">
+          Monitor your printer's camera feed
+        </p>
       </div>
 
       <Card>
@@ -29,15 +76,16 @@ export default function Webcam() {
           <CardDescription>Real-time view of your 3D printer</CardDescription>
         </CardHeader>
         <CardContent>
-          {isLoading ? (
+          {isLoading || isTesting ? (
             <div className="flex items-center justify-center h-96 bg-muted rounded-lg">
               <p className="text-muted-foreground">Loading camera...</p>
             </div>
-          ) : !hasWebcam ? (
+          ) : !streamUrl ? (
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                No webcam configured. Please configure your webcam settings in OctoPrint.
+                No reachable webcam stream found. Make sure you're connected
+                either locally or via Tailscale.
               </AlertDescription>
             </Alert>
           ) : (
