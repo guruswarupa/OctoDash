@@ -5,7 +5,7 @@ import { storage } from "./storage";
 import { OctoPrintClient } from "./octoprint";
 import { z } from "zod";
 import multer from "multer";
-import fs from "fs";
+import os from "os";
 
 // Use memory storage to avoid filesystem dependencies
 const upload = multer({ storage: multer.memoryStorage() });
@@ -392,18 +392,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Webcam
-  app.get("/api/webcam/url", async (req, res) => {
-    try {
-
-      res.json({
-        streamUrl: "http://localhost/webcam/?action=stream",
-        snapshotUrl: "http://localhost:8080/?action=snapshot",
-      });
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
+function getLocalIp(): string {
+  const interfaces = os.networkInterfaces();
+  for (const iface of Object.values(interfaces)) {
+    for (const config of iface || []) {
+      if (config.family === "IPv4" && !config.internal) {
+        return config.address;
+      }
     }
-  });
-
-  return httpServer;
+  }
+  return "localhost";
 }
+
+app.get("/api/webcam/url", async (req, res) => {
+  try {
+    const ip = getLocalIp();
+    res.json({
+      streamUrl: `http://${ip}/webcam/?action=stream`,
+      snapshotUrl: `http://${ip}:8080/?action=snapshot`,
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
