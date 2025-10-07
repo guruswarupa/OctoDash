@@ -3,7 +3,9 @@ import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { OctoPrintClient } from "./octoprint";
+import { z } from "zod";
 import multer from "multer";
+import os from "os";
 
 // Use memory storage to avoid filesystem dependencies
 const upload = multer({ storage: multer.memoryStorage() });
@@ -390,12 +392,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+function getLocalIp(): string {
+  const interfaces = os.networkInterfaces();
+  for (const iface of Object.values(interfaces)) {
+    for (const config of iface || []) {
+      if (config.family === "IPv4" && !config.internal) {
+        return config.address;
+      }
+    }
+  }
+  return "localhost";
+}
+
 app.get("/api/webcam/url", async (req, res) => {
   try {
-    const ip = getLocalIp(); 
+    const ip = getLocalIp(); // e.g., 192.168.0.150
     res.json({
-      streamUrl: `http://dddprinter/webcam/?action=stream`,
-      snapshotUrl: `http://dddprinter:8080/?action=snapshot`,
+      streamUrl: `http://${ip}/webcam/?action=stream`,
+      snapshotUrl: `http://${ip}:8080/?action=snapshot`,
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
