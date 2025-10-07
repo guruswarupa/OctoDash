@@ -418,7 +418,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
 
       res.json({
-        streamUrl: makeAbsoluteUrl(settings.webcam?.streamUrl, ":8080/?action=stream"),
+        streamUrl: makeAbsoluteUrl(settings.webcam?.streamUrl, "/webcam/?action=stream"),
         snapshotUrl: makeAbsoluteUrl(settings.webcam?.snapshotUrl, ":8080/?action=snapshot"),
       });
     } catch (error: any) {
