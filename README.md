@@ -181,7 +181,7 @@ sudo systemctl enable octoprint-control.service
 - Ensure you ran `npm run build` before setup
 - Check systemd service status: `sudo systemctl status octoprint-control.service`
 - View service logs: `sudo journalctl -u octoprint-control.service`
-- Ensure autostart file exists: `cat ~/.config/lxsession/LXDE-pi/autostart`
+- Ensure autostart file exists: `cat ~/.config/lxsession/LXDE/autostart`
 
 ### WebSocket disconnects frequently
 - Check network stability

@@ -18,13 +18,13 @@ sudo apt-get update
 sudo apt-get install -y chromium-browser unclutter xdotool
 
 # Create autostart directory if it doesn't exist
-mkdir -p ~/.config/lxsession/LXDE-pi
+mkdir -p ~/.config/lxsession/LXDE
 mkdir -p ~/.config/autostart
 
 # Create autostart script for kiosk mode
-cat > ~/.config/lxsession/LXDE-pi/autostart << 'EOF'
-@lxpanel --profile LXDE-pi
-@pcmanfm --desktop --profile LXDE-pi
+cat > ~/.config/lxsession/LXDE/autostart << 'EOF'
+@lxpanel --profile LXDE
+@pcmanfm --desktop --profile LXDE
 @xscreensaver -no-splash
 
 # Disable screen blanking
@@ -39,10 +39,10 @@ cat > ~/.config/lxsession/LXDE-pi/autostart << 'EOF'
 @bash -c 'sleep 5'
 
 # Launch OctoPrint Control Interface in Chromium kiosk mode
-@chromium-browser --noerrdialogs --disable-infobars --kiosk http://localhost:5000
+@chromium-browser --noerrdialogs --disable-infobars --kiosk http://localhost:4000
 EOF
 
-echo "Autostart configuration created at ~/.config/lxsession/LXDE-pi/autostart"
+echo "Autostart configuration created at ~/.config/lxsession/LXDE/autostart"
 
 # Create systemd service to start the Node.js server on boot
 echo "Creating systemd service for the web application..."
