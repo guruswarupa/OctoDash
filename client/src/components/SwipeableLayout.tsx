@@ -96,13 +96,6 @@ export function SwipeableLayout({ children }: SwipeableLayoutProps) {
 
   // Handle mouse events for desktop
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Only start dragging if not clicking on scrollable content
-    const target = e.target as HTMLElement;
-    const scrollableParent = target.closest('.overflow-auto');
-    
-    // Don't interfere with scrollable areas
-    if (scrollableParent) return;
-    
     setIsDragging(true);
     setStartPos({ x: e.clientX, y: e.clientY });
   };
