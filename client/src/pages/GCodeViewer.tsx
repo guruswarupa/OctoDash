@@ -12,8 +12,8 @@ export default function GCodeViewer() {
 
   // Get the current G-code file URL from the job
   const gcodeUrl = job?.file?.name 
-  ? `/api/files/local/${encodeURIComponent(job.file.name)}`
-  : null;
+    ? `/api/files/local/${job.file.name}` 
+    : null;
 
   const completionPercentage = progress?.completion || 0;
 

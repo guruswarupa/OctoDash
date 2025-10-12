@@ -185,19 +185,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-    app.get("/api/files/:location/:path(*)", async (req, res) => {
+  app.get("/api/files/:location/:path(*)", async (req, res) => {
     try {
       const client = getClient();
       const { location, path } = req.params;
-
-      // Use the OctoPrint API to get the raw file
-      const response = await client.client.get(`/files/${location}/${encodeURIComponent(path)}`, {
-        params: { download: true },    // Force raw file download
-        responseType: "text",          // Return as plain text
-      });
-
-      res.setHeader("Content-Type", "text/plain; charset=utf-8");
-      res.send(response.data);
+      const fileContent = await client.downloadFile(location, path);
+      res.setHeader('Content-Type', 'text/plain');
+      res.send(fileContent);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }

@@ -138,10 +138,13 @@ export class OctoPrintClient {
   }
 
   async downloadFile(location: string, path: string): Promise<string> {
-    const res = await this.client.get(`/files/${location}/${encodeURIComponent(path)}`, {
-      params: { download: "true" },   // 👈 Force raw file download
-      responseType: "text",           // 👈 Ensure Axios doesn’t parse as JSON
-      transformResponse: [(data: string) => data], // 👈 Disable auto parsing
+    // Use the downloads endpoint instead of API endpoint to get raw file content
+    const res = await axios.get(`${this.serverUrl}/downloads/files/${location}/${path}`, {
+      responseType: 'text',
+      headers: {
+        "X-Api-Key": this.client.defaults.headers["X-Api-Key"],
+      },
+      timeout: 10000,
     });
     return res.data;
   }

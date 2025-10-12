@@ -29,3 +29,5 @@
 [x] 29. Added loading states and graceful error messages to G-code viewer
 [x] 30. Updated server port to 5000 for Replit webview compatibility
 [x] 31. Updated workflow configuration to wait for port 5000
+[x] 32. Fixed G-code file download to use /downloads/ endpoint for raw content
+[x] 33. Corrected API endpoint from returning JSON metadata to raw G-code text
