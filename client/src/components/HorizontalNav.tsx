@@ -1,4 +1,4 @@
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import {
   Home,
   Gauge,
@@ -34,7 +34,7 @@ export function HorizontalNav() {
             const Icon = item.icon;
             
             return (
-              <a
+              <Link
                 key={item.url}
                 href={item.url}
                 data-testid={`link-nav-${item.title.toLowerCase()}`}
@@ -51,7 +51,7 @@ export function HorizontalNav() {
                 {isActive && (
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />
                 )}
-              </a>
+              </Link>
             );
           })}
         </div>
