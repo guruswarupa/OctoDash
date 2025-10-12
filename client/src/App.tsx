@@ -3,11 +3,10 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/AppSidebar";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ConnectionStatus } from "@/components/ConnectionStatus";
+import { HorizontalNav } from "@/components/HorizontalNav";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import Dashboard from "@/pages/Dashboard";
 import Control from "@/pages/Control";
@@ -39,37 +38,34 @@ function AppContent() {
   const { isConnected } = useWebSocket();
 
   return (
-    <div className="flex h-screen w-full">
-      <AppSidebar />
-      <div className="flex flex-col flex-1 min-w-0">
-        <header className="flex items-center justify-between p-2 sm:p-4 border-b gap-2">
-          <div className="flex items-center gap-2 sm:gap-4 min-w-0">
-            <SidebarTrigger data-testid="button-sidebar-toggle" />
-            <ConnectionStatus isConnected={isConnected} />
-          </div>
-          <ThemeToggle />
-        </header>
-        <main className="flex-1 overflow-auto p-3 sm:p-4 md:p-6">
+    <div className="flex flex-col h-screen w-full">
+      <header className="flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 border-b bg-background sticky top-0 z-50">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+          <h1 className="text-lg sm:text-xl font-bold truncate" data-testid="text-app-title">
+            OctoPrint
+          </h1>
+          <ConnectionStatus isConnected={isConnected} />
+        </div>
+        <ThemeToggle />
+      </header>
+      
+      <HorizontalNav />
+      
+      <main className="flex-1 overflow-auto">
+        <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6">
           <Router />
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
 
 export default function App() {
-  const style = {
-    "--sidebar-width": "16rem",
-    "--sidebar-width-icon": "3rem",
-  };
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <ThemeProvider defaultTheme="dark">
-          <SidebarProvider style={style as React.CSSProperties} defaultOpen={false}>
-            <AppContent />
-          </SidebarProvider>
+          <AppContent />
           <Toaster />
         </ThemeProvider>
       </TooltipProvider>
