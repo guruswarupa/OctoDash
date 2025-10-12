@@ -82,6 +82,18 @@ npm run dev
 
 The app runs on port 5000 with hot reload enabled.
 
+## Replit Environment Setup
+
+This project has been configured for Replit:
+- **Port**: Application runs on port 5000 (configured for Replit's infrastructure)
+- **Workflow**: "Start application" workflow runs `npm run dev` automatically
+- **Deployment**: Configured for autoscale deployment with build and start commands
+- **Host Configuration**: Vite dev server configured with `allowedHosts: true` to work with Replit's proxy
+
+The application will work without OctoPrint connection - you can configure it:
+1. Through the `.env` file with `OCTOPRINT_URL` and `OCTOPRINT_API_KEY`
+2. Or via the Settings page in the application UI
+
 ## Future Enhancements
 
 Potential additions:
