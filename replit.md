@@ -30,15 +30,23 @@ This application provides a touch-optimized control interface for OctoPrint that
 **Frontend (`client/src/`):**
 - `hooks/useWebSocket.ts` - WebSocket hook for real-time updates
 - `lib/api.ts` - API client for backend communication
-- `pages/` - Main application pages (Dashboard, Control, Temperature, Files, Camera, Timelapse, Terminal, Settings)
-- `components/HorizontalNav.tsx` - Android-style horizontal scrollable navigation with tab indicators
+- `pages/` - Main application pages:
+  - **Dashboard** (center) - Printer status overview
+  - **Control** (left) - Movement controls + Temperature management (tabbed)
+  - **Media** (right) - Files, Camera, and Timelapse (tabbed)
+  - **Terminal** (bottom) - G-code terminal
+  - **Settings** (top) - Connection configuration
+- `components/HorizontalNav.tsx` - "+" pattern navigation with CSS Grid layout
 - `components/` - Reusable UI components
 
 **Design:**
-- **Navigation**: Horizontal scrollable tabs (Android-style) with active indicators and icons
+- **Navigation**: "+" cross pattern layout using CSS Grid
+  - Settings (top), Control (left), Dashboard (center), Media (right), Terminal (bottom)
+  - Responsive: Icon-only on small screens, full labels on larger screens
+  - Visual active indicators with primary color highlights
 - **Dark mode optimized**: Primary interface mode with clean visual hierarchy
 - **Touch-first design**: 44px+ touch targets, optimized spacing for mobile and tablet
-- **Responsive layout**: Mobile-first approach with breakpoints (md:, lg:)
+- **Responsive layout**: Mobile-first approach with breakpoints (sm:, md:, lg:)
 - **Typography**: Consistent heading sizes and text hierarchy across all pages
 - **Minimal animations**: Optimized for Raspberry Pi performance
 
@@ -75,6 +83,9 @@ The interface launches automatically on boot at http://localhost:5000
 ✅ Dark/light theme toggle
 ✅ WebSocket auto-reconnect
 ✅ Error handling with toast notifications
+✅ "+" pattern directional navigation (5 main sections)
+✅ Responsive navigation (icon-only on mobile)
+✅ Tabbed interfaces for Control (Movement/Temperature) and Media (Files/Camera/Timelapse)
 
 ## Development
 
