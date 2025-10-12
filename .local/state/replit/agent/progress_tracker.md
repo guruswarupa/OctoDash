@@ -25,3 +25,7 @@
 [x] 25. Created WebSocket context provider to prevent multiple connections
 [x] 26. Fixed WebSocket connect/disconnect cycling issue
 [x] 27. Updated all components to use shared WebSocket context
+[x] 28. Fixed G-code viewer Three.js NaN errors with proper error handling
+[x] 29. Added loading states and graceful error messages to G-code viewer
+[x] 30. Updated server port to 5000 for Replit webview compatibility
+[x] 31. Updated workflow configuration to wait for port 5000
