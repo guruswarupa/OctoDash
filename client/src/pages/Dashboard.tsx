@@ -2,14 +2,19 @@ import { PrinterStatusCard } from "@/components/PrinterStatusCard";
 import { TemperatureCard } from "@/components/TemperatureCard";
 import { PrintProgressCard } from "@/components/PrintProgressCard";
 import { QuickControlsCard } from "@/components/QuickControlsCard";
+import { SettingsDialog } from "@/components/SettingsDialog";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Settings } from "lucide-react";
+import { useState } from "react";
 
 export default function Dashboard() {
   const { status, job, progress } = useWebSocket();
   const { toast } = useToast();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const startMutation = useMutation({
     mutationFn: api.startJob,
@@ -55,14 +60,27 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-4 md:space-y-6 max-w-6xl mx-auto">
-      <div className="space-y-1">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight" data-testid="heading-dashboard">
-          Dashboard
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Monitor your printer status and progress
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div className="space-y-1 flex-1 min-w-0">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight" data-testid="heading-dashboard">
+            Dashboard
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Monitor your printer status and progress
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setSettingsOpen(true)}
+          data-testid="button-open-settings"
+          className="shrink-0"
+        >
+          <Settings className="h-5 w-5" />
+        </Button>
       </div>
+
+      <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
 
       <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         <PrinterStatusCard 

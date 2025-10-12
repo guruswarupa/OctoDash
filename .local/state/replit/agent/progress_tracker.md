@@ -14,3 +14,7 @@
 [x] 14. Hidden scrollbars and fixed scrolling to work with mouse/touchpad
 [x] 15. Fixed vertical swipe gestures (up/down) to work properly
 [x] 16. Changed arrow indicators to show page names instead of swipe directions
+[x] 17. Created 3D G-code viewer page using react-gcode-viewer library
+[x] 18. Replaced Settings page with G-code viewer in top navigation position
+[x] 19. Converted Settings to a dialog component
+[x] 20. Added Settings button to Dashboard top-right corner

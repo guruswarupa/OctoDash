@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 interface SwipeableLayoutProps {
   children: {
-    settings: React.ReactNode;
+    gcode: React.ReactNode;
     control: React.ReactNode;
     dashboard: React.ReactNode;
     media: React.ReactNode;
@@ -14,9 +14,9 @@ interface SwipeableLayoutProps {
 }
 
 const pageRoutes = {
-  "/settings": { x: 0, y: 0, neighbors: { down: "/" } },
+  "/gcode": { x: 0, y: 0, neighbors: { down: "/" } },
   "/control": { x: -1, y: 0, neighbors: { right: "/" } },
-  "/": { x: 0, y: 0, neighbors: { up: "/settings", left: "/control", right: "/media", down: "/terminal" } },
+  "/": { x: 0, y: 0, neighbors: { up: "/gcode", left: "/control", right: "/media", down: "/terminal" } },
   "/media": { x: 1, y: 0, neighbors: { left: "/" } },
   "/terminal": { x: 0, y: 1, neighbors: { up: "/" } },
 };
@@ -31,7 +31,7 @@ export function SwipeableLayout({ children }: SwipeableLayoutProps) {
   // Calculate position based on current route
   const getPositionForRoute = (route: string) => {
     const routes: Record<string, { col: number; row: number }> = {
-      "/settings": { col: 2, row: 1 },
+      "/gcode": { col: 2, row: 1 },
       "/control": { col: 1, row: 2 },
       "/": { col: 2, row: 2 },
       "/media": { col: 3, row: 2 },
@@ -50,7 +50,7 @@ export function SwipeableLayout({ children }: SwipeableLayoutProps) {
 
   // Page name mapping
   const pageNames: Record<string, string> = {
-    "/settings": "Settings",
+    "/gcode": "3D Model",
     "/control": "Control",
     "/": "Dashboard",
     "/media": "Media",
@@ -181,7 +181,7 @@ export function SwipeableLayout({ children }: SwipeableLayoutProps) {
         <div className="w-screen h-screen" />
         <div className="w-screen h-screen bg-background">
           <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 h-full overflow-auto scrollbar-hide">
-            {children.settings}
+            {children.gcode}
           </div>
         </div>
         <div className="w-screen h-screen" />

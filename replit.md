@@ -31,28 +31,26 @@ This application provides a touch-optimized control interface for OctoPrint that
 - `hooks/useWebSocket.ts` - WebSocket hook for real-time updates
 - `lib/api.ts` - API client for backend communication
 - `pages/` - Main application pages:
-  - **Dashboard** (center) - Printer status overview
+  - **Dashboard** (center) - Printer status overview with Settings button
   - **Control** (left) - Movement controls + Temperature management (tabbed)
   - **Media** (right) - Files, Camera, and Timelapse (tabbed)
   - **Terminal** (bottom) - G-code terminal
-  - **Settings** (top) - Connection configuration
-- `components/HorizontalNav.tsx` - "+" pattern navigation with CSS Grid layout
+  - **GCodeViewer** (top) - 3D G-code visualization using react-gcode-viewer
+- `components/SwipeableLayout.tsx` - Swipeable "+" pattern navigation with CSS Grid layout
+- `components/SettingsDialog.tsx` - Settings modal accessible from Dashboard
 - `components/` - Reusable UI components
 
 **Design:**
 - **Navigation**: "+" cross pattern layout using CSS Grid
-  - Settings (top), Control (left), Dashboard (center), Media (right), Terminal (bottom)
+  - 3D G-code Viewer (top), Control (left), Dashboard (center), Media (right), Terminal (bottom)
   - Responsive: Icon-only on small screens, full labels on larger screens
   - Visual active indicators with primary color highlights
-<<<<<<< HEAD
 - **Swipeable Interface**: Touch/gesture-based navigation
   - All 5 pages arranged in physical + pattern on a 3x3 grid
   - Swipe left/right/up/down to navigate between pages
-  - Directional arrow indicators show available swipe directions
+  - Directional arrow indicators show destination page names
   - Works with both touch and mouse gestures
   - 50px threshold for swipe detection
-=======
->>>>>>> ee0ea9dadc059243022eedd0187432dc36484517
 - **Dark mode optimized**: Primary interface mode with clean visual hierarchy
 - **Touch-first design**: 44px+ touch targets, optimized spacing for mobile and tablet
 - **Responsive layout**: Mobile-first approach with breakpoints (sm:, md:, lg:)
@@ -95,11 +93,10 @@ The interface launches automatically on boot at http://localhost:5000
 ✅ "+" pattern directional navigation (5 main sections)
 ✅ Responsive navigation (icon-only on mobile)
 ✅ Tabbed interfaces for Control (Movement/Temperature) and Media (Files/Camera/Timelapse)
-<<<<<<< HEAD
 ✅ Swipeable page layout with touch/mouse gesture navigation
-✅ Directional arrow indicators for intuitive swipe discovery
-=======
->>>>>>> ee0ea9dadc059243022eedd0187432dc36484517
+✅ Directional arrow indicators showing destination page names
+✅ 3D G-code viewer using react-gcode-viewer library
+✅ Settings dialog accessible via Dashboard button
 
 ## Development
 

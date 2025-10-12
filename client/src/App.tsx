@@ -13,7 +13,7 @@ import Dashboard from "@/pages/Dashboard";
 import Control from "@/pages/Control";
 import Media from "@/pages/Media";
 import Terminal from "@/pages/Terminal";
-import Settings from "@/pages/Settings";
+import GCodeViewer from "@/pages/GCodeViewer";
 import NotFound from "@/pages/not-found";
 
 function AppContent() {
@@ -26,7 +26,7 @@ function AppContent() {
           <Route path="/" component={() => (
             <SwipeableLayout>
               {{
-                settings: <Settings />,
+                gcode: <GCodeViewer />,
                 control: <Control />,
                 dashboard: <Dashboard />,
                 media: <Media />,
@@ -37,7 +37,7 @@ function AppContent() {
           <Route path="/control" component={() => (
             <SwipeableLayout>
               {{
-                settings: <Settings />,
+                gcode: <GCodeViewer />,
                 control: <Control />,
                 dashboard: <Dashboard />,
                 media: <Media />,
@@ -48,7 +48,7 @@ function AppContent() {
           <Route path="/media" component={() => (
             <SwipeableLayout>
               {{
-                settings: <Settings />,
+                gcode: <GCodeViewer />,
                 control: <Control />,
                 dashboard: <Dashboard />,
                 media: <Media />,
@@ -56,10 +56,10 @@ function AppContent() {
               }}
             </SwipeableLayout>
           )} />
-          <Route path="/settings" component={() => (
+          <Route path="/gcode" component={() => (
             <SwipeableLayout>
               {{
-                settings: <Settings />,
+                gcode: <GCodeViewer />,
                 control: <Control />,
                 dashboard: <Dashboard />,
                 media: <Media />,
@@ -70,7 +70,7 @@ function AppContent() {
           <Route path="/terminal" component={() => (
             <SwipeableLayout>
               {{
-                settings: <Settings />,
+                gcode: <GCodeViewer />,
                 control: <Control />,
                 dashboard: <Dashboard />,
                 media: <Media />,
