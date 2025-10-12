@@ -48,6 +48,15 @@ export function SwipeableLayout({ children }: SwipeableLayoutProps) {
     right?: string;
   };
 
+  // Page name mapping
+  const pageNames: Record<string, string> = {
+    "/settings": "Settings",
+    "/control": "Control",
+    "/": "Dashboard",
+    "/media": "Media",
+    "/terminal": "Terminal",
+  };
+
   // Handle touch start
   const handleTouchStart = (e: React.TouchEvent) => {
     setIsDragging(true);
@@ -120,14 +129,14 @@ export function SwipeableLayout({ children }: SwipeableLayoutProps) {
           <div className="absolute top-4 left-1/2 -translate-x-1/2">
             <div className="flex flex-col items-center gap-1 text-muted-foreground/40">
               <ArrowUp className="h-6 w-6 animate-bounce" />
-              <span className="text-xs hidden sm:inline">Swipe up</span>
+              <span className="text-xs hidden sm:inline">{pageNames[currentNeighbors.up]}</span>
             </div>
           </div>
         )}
         {currentNeighbors.down && (
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
             <div className="flex flex-col items-center gap-1 text-muted-foreground/40">
-              <span className="text-xs hidden sm:inline">Swipe down</span>
+              <span className="text-xs hidden sm:inline">{pageNames[currentNeighbors.down]}</span>
               <ArrowDown className="h-6 w-6 animate-bounce" />
             </div>
           </div>
@@ -136,14 +145,14 @@ export function SwipeableLayout({ children }: SwipeableLayoutProps) {
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
             <div className="flex items-center gap-1 text-muted-foreground/40">
               <ArrowLeft className="h-6 w-6 animate-pulse" />
-              <span className="text-xs hidden sm:inline">Swipe left</span>
+              <span className="text-xs hidden sm:inline">{pageNames[currentNeighbors.left]}</span>
             </div>
           </div>
         )}
         {currentNeighbors.right && (
           <div className="absolute right-4 top-1/2 -translate-y-1/2">
             <div className="flex items-center gap-1 text-muted-foreground/40">
-              <span className="text-xs hidden sm:inline">Swipe right</span>
+              <span className="text-xs hidden sm:inline">{pageNames[currentNeighbors.right]}</span>
               <ArrowRight className="h-6 w-6 animate-pulse" />
             </div>
           </div>

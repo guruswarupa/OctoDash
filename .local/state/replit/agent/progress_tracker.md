@@ -13,3 +13,4 @@
 [x] 13. Removed top navbar for full-screen swipeable interface
 [x] 14. Hidden scrollbars and fixed scrolling to work with mouse/touchpad
 [x] 15. Fixed vertical swipe gestures (up/down) to work properly
+[x] 16. Changed arrow indicators to show page names instead of swipe directions
