@@ -9,6 +9,7 @@ export default function GCodeViewer() {
   const { job, progress } = useWebSocket();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [validUrl, setValidUrl] = useState<string | null>(null);
 
   // Get the current G-code file URL from the job
   const gcodeUrl = job?.file?.name 
@@ -17,24 +18,42 @@ export default function GCodeViewer() {
 
   const completionPercentage = progress?.completion || 0;
 
-  // Reset error when URL changes
+  // Validate file before rendering viewer
   useEffect(() => {
     if (gcodeUrl) {
       setError(null);
+      setValidUrl(null);
       setIsLoading(true);
       
-      // Test if the file exists
+      // Test if the file exists and is valid
       fetch(gcodeUrl)
         .then(response => {
           if (!response.ok) {
-            throw new Error('File not found or cannot be loaded');
+            throw new Error(`Server error: ${response.status}`);
           }
+          return response.text();
+        })
+        .then(content => {
+          // Check if content is valid G-code (not JSON or empty)
+          if (!content || content.trim().length === 0) {
+            throw new Error('File is empty');
+          }
+          if (content.trim().startsWith('{') || content.trim().startsWith('[')) {
+            throw new Error('Received JSON instead of G-code file');
+          }
+          // File is valid, set the URL for viewer
+          setValidUrl(gcodeUrl);
           setIsLoading(false);
         })
         .catch(err => {
           setError(err.message || 'Failed to load G-code file');
+          setValidUrl(null);
           setIsLoading(false);
         });
+    } else {
+      setValidUrl(null);
+      setError(null);
+      setIsLoading(false);
     }
   }, [gcodeUrl]);
 
@@ -58,22 +77,22 @@ export default function GCodeViewer() {
                 {error}
                 <br />
                 <span className="text-xs mt-2 block">
-                  Configure your OctoPrint connection in Settings to load files.
+                  Make sure OctoPrint is configured and the file exists.
                 </span>
               </AlertDescription>
             </Alert>
           </div>
-        ) : gcodeUrl && !isLoading ? (
+        ) : validUrl ? (
           <div className="w-full h-full">
             <GCodeViewerComponent
               orbitControls
               showAxes
               quality={0.7}
               style={{ width: '100%', height: '100%' }}
-              url={gcodeUrl}
+              url={validUrl}
             />
           </div>
-        ) : gcodeUrl && isLoading ? (
+        ) : isLoading ? (
           <div className="h-full w-full flex items-center justify-center text-muted-foreground">
             <div className="text-center">
               <Box className="h-12 w-12 mx-auto mb-4 animate-spin" />
@@ -91,7 +110,7 @@ export default function GCodeViewer() {
         )}
       </Card>
 
-      {gcodeUrl && !error && (
+      {validUrl && !error && (
         <div className="text-sm text-muted-foreground text-center">
           Print Progress: {completionPercentage.toFixed(1)}%
         </div>

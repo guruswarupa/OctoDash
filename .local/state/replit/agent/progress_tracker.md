@@ -31,3 +31,6 @@
 [x] 31. Updated workflow configuration to wait for port 5000
 [x] 32. Fixed G-code file download to use /downloads/ endpoint for raw content
 [x] 33. Corrected API endpoint from returning JSON metadata to raw G-code text
+[x] 34. Fixed race condition preventing viewer from validating data before render
+[x] 35. Added three-state validation (loading/valid/error) to prevent NaN errors
+[x] 36. Added G-code content validation (checks for empty or JSON responses)
