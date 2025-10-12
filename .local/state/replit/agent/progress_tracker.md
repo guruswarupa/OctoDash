@@ -10,3 +10,4 @@
 [x] 10. Added directional arrow indicators with proper swipe instructions
 [x] 11. Fixed swipe direction logic to match arrow indicators
 [x] 12. Corrected inverted swipe directions (left/right, up/down)
+[x] 13. Removed top navbar for full-screen swipeable interface

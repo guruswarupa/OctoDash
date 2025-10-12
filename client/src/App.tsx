@@ -21,18 +21,6 @@ function AppContent() {
 
   return (
     <div className="flex flex-col h-screen w-full">
-      <header className="flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 border-b bg-background sticky top-0 z-50">
-        <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-          <h1 className="text-lg sm:text-xl font-bold truncate" data-testid="text-app-title">
-            OctoPrint
-          </h1>
-          <ConnectionStatus isConnected={isConnected} />
-        </div>
-        <ThemeToggle />
-      </header>
-      
-      <HorizontalNav />
-      
       <main className="flex-1 overflow-hidden">
         <Switch>
           <Route path="/" component={() => (
