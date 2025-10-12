@@ -138,8 +138,10 @@ export class OctoPrintClient {
   }
 
   async downloadFile(location: string, path: string): Promise<string> {
-    const res = await this.client.get(`/files/${location}/${path}`, {
-      responseType: 'text',
+    const res = await this.client.get(`/files/${location}/${encodeURIComponent(path)}`, {
+      params: { download: "true" },   // 👈 Force raw file download
+      responseType: "text",           // 👈 Ensure Axios doesn’t parse as JSON
+      transformResponse: [(data: string) => data], // 👈 Disable auto parsing
     });
     return res.data;
   }

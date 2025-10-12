@@ -190,7 +190,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const client = getClient();
       const { location, path } = req.params;
       const fileContent = await client.downloadFile(location, path);
-      res.setHeader('Content-Type', 'text/plain');
+      res.setHeader("Content-Type", "text/plain; charset=utf-8");
       res.send(fileContent);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
