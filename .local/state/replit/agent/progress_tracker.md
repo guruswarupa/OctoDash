@@ -11,3 +11,4 @@
 [x] 11. Fixed swipe direction logic to match arrow indicators
 [x] 12. Corrected inverted swipe directions (left/right, up/down)
 [x] 13. Removed top navbar for full-screen swipeable interface
+[x] 14. Hidden scrollbars and fixed scrolling to work with mouse/touchpad

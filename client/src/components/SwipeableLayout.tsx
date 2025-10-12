@@ -96,6 +96,13 @@ export function SwipeableLayout({ children }: SwipeableLayoutProps) {
 
   // Handle mouse events for desktop
   const handleMouseDown = (e: React.MouseEvent) => {
+    // Only start dragging if not clicking on scrollable content
+    const target = e.target as HTMLElement;
+    const scrollableParent = target.closest('.overflow-auto');
+    
+    // Don't interfere with scrollable areas
+    if (scrollableParent) return;
+    
     setIsDragging(true);
     setStartPos({ x: e.clientX, y: e.clientY });
   };
@@ -171,31 +178,31 @@ export function SwipeableLayout({ children }: SwipeableLayoutProps) {
         {/* Empty cells */}
         <div className="w-screen h-screen" />
         <div className="w-screen h-screen bg-background">
-          <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 h-full overflow-auto">
+          <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 h-full overflow-auto scrollbar-hide">
             {children.settings}
           </div>
         </div>
         <div className="w-screen h-screen" />
 
         <div className="w-screen h-screen bg-background">
-          <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 h-full overflow-auto">
+          <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 h-full overflow-auto scrollbar-hide">
             {children.control}
           </div>
         </div>
         <div className="w-screen h-screen bg-background">
-          <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 h-full overflow-auto">
+          <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 h-full overflow-auto scrollbar-hide">
             {children.dashboard}
           </div>
         </div>
         <div className="w-screen h-screen bg-background">
-          <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 h-full overflow-auto">
+          <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 h-full overflow-auto scrollbar-hide">
             {children.media}
           </div>
         </div>
 
         <div className="w-screen h-screen" />
         <div className="w-screen h-screen bg-background">
-          <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 h-full overflow-auto">
+          <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 h-full overflow-auto scrollbar-hide">
             {children.terminal}
           </div>
         </div>
