@@ -30,14 +30,17 @@ This application provides a touch-optimized control interface for OctoPrint that
 **Frontend (`client/src/`):**
 - `hooks/useWebSocket.ts` - WebSocket hook for real-time updates
 - `lib/api.ts` - API client for backend communication
-- `pages/` - Main application pages (Dashboard, Control, Temperature, Files, Terminal, Settings)
+- `pages/` - Main application pages (Dashboard, Control, Temperature, Files, Camera, Timelapse, Terminal, Settings)
+- `components/HorizontalNav.tsx` - Android-style horizontal scrollable navigation with tab indicators
 - `components/` - Reusable UI components
 
 **Design:**
-- Dark mode optimized (primary interface mode)
-- Touch-first design with 44px+ touch targets
-- Industrial dashboard aesthetic
-- Minimal animations for Raspberry Pi performance
+- **Navigation**: Horizontal scrollable tabs (Android-style) with active indicators and icons
+- **Dark mode optimized**: Primary interface mode with clean visual hierarchy
+- **Touch-first design**: 44px+ touch targets, optimized spacing for mobile and tablet
+- **Responsive layout**: Mobile-first approach with breakpoints (md:, lg:)
+- **Typography**: Consistent heading sizes and text hierarchy across all pages
+- **Minimal animations**: Optimized for Raspberry Pi performance
 
 ## Configuration
 
