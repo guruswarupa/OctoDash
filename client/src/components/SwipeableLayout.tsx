@@ -74,20 +74,20 @@ export function SwipeableLayout({ children }: SwipeableLayoutProps) {
 
     const threshold = 50; // minimum swipe distance
 
-    // Determine swipe direction
+    // Determine swipe direction (inverted: swipe left shows right page, etc.)
     if (Math.abs(offset.x) > Math.abs(offset.y)) {
       // Horizontal swipe
-      if (offset.x > threshold && currentNeighbors.right) {
-        setLocation(currentNeighbors.right);
-      } else if (offset.x < -threshold && currentNeighbors.left) {
+      if (offset.x > threshold && currentNeighbors.left) {
         setLocation(currentNeighbors.left);
+      } else if (offset.x < -threshold && currentNeighbors.right) {
+        setLocation(currentNeighbors.right);
       }
     } else {
       // Vertical swipe
-      if (offset.y > threshold && currentNeighbors.down) {
-        setLocation(currentNeighbors.down);
-      } else if (offset.y < -threshold && currentNeighbors.up) {
+      if (offset.y > threshold && currentNeighbors.up) {
         setLocation(currentNeighbors.up);
+      } else if (offset.y < -threshold && currentNeighbors.down) {
+        setLocation(currentNeighbors.down);
       }
     }
 
