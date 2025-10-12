@@ -18,3 +18,10 @@
 [x] 18. Replaced Settings page with G-code viewer in top navigation position
 [x] 19. Converted Settings to a dialog component
 [x] 20. Added Settings button to Dashboard top-right corner
+[x] 21. Fixed missing tsx package installation
+[x] 22. Changed server port from 4000 to 5000 (required for Replit webview)
+[x] 23. Fixed Vite HMR WebSocket configuration to include explicit port
+[x] 24. Resolved 'wss://localhost:undefined' WebSocket error
+[x] 25. Created WebSocket context provider to prevent multiple connections
+[x] 26. Fixed WebSocket connect/disconnect cycling issue
+[x] 27. Updated all components to use shared WebSocket context

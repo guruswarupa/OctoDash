@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { ConnectionStatus } from "@/components/ConnectionStatus";
 import { HorizontalNav } from "@/components/HorizontalNav";
 import { SwipeableLayout } from "@/components/SwipeableLayout";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { WebSocketProvider, useWebSocket } from "@/contexts/WebSocketContext";
 import Dashboard from "@/pages/Dashboard";
 import Control from "@/pages/Control";
 import Media from "@/pages/Media";
@@ -90,8 +90,10 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <ThemeProvider defaultTheme="dark">
-          <AppContent />
-          <Toaster />
+          <WebSocketProvider>
+            <AppContent />
+            <Toaster />
+          </WebSocketProvider>
         </ThemeProvider>
       </TooltipProvider>
     </QueryClientProvider>

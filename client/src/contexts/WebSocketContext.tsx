@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { createContext, useContext, useEffect, useState, useRef, ReactNode } from "react";
 import type { PrinterStatus, Job, JobProgress } from "@shared/schema";
 
 interface WebSocketData {
@@ -8,7 +8,22 @@ interface WebSocketData {
   isConnected: boolean;
 }
 
+const WebSocketContext = createContext<WebSocketData>({
+  status: null,
+  job: null,
+  progress: null,
+  isConnected: false,
+});
+
 export function useWebSocket() {
+  return useContext(WebSocketContext);
+}
+
+interface WebSocketProviderProps {
+  children: ReactNode;
+}
+
+export function WebSocketProvider({ children }: WebSocketProviderProps) {
   const [data, setData] = useState<WebSocketData>({
     status: null,
     job: null,
@@ -74,5 +89,9 @@ export function useWebSocket() {
     };
   }, []);
 
-  return data;
+  return (
+    <WebSocketContext.Provider value={data}>
+      {children}
+    </WebSocketContext.Provider>
+  );
 }

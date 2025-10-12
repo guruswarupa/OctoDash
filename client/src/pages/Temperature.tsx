@@ -1,5 +1,5 @@
 import { TemperatureControl } from "@/components/TemperatureControl";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useWebSocket } from "@/contexts/WebSocketContext";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";

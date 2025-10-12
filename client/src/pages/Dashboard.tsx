@@ -3,7 +3,7 @@ import { TemperatureCard } from "@/components/TemperatureCard";
 import { PrintProgressCard } from "@/components/PrintProgressCard";
 import { QuickControlsCard } from "@/components/QuickControlsCard";
 import { SettingsDialog } from "@/components/SettingsDialog";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useWebSocket } from "@/contexts/WebSocketContext";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";

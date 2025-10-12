@@ -1,7 +1,7 @@
 import { GCodeViewer as GCodeViewerComponent } from "react-gcode-viewer";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
-import { useWebSocket } from "@/hooks/useWebSocket";
+import { useWebSocket } from "@/contexts/WebSocketContext";
 
 export default function GCodeViewer() {
   const { job, progress } = useWebSocket();
