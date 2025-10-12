@@ -57,19 +57,19 @@ export default function Webcam() {
   }, [webcamData]);
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold" data-testid="heading-webcam">
+    <div className="space-y-4 md:space-y-6 max-w-4xl mx-auto">
+      <div className="space-y-1">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight" data-testid="heading-webcam">
           Camera
         </h1>
-        <p className="text-sm sm:text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Monitor your printer's camera feed
         </p>
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+        <CardHeader className="space-y-1">
+          <CardTitle className="flex items-center gap-2 text-lg">
             <Camera className="h-5 w-5" />
             Live Camera Feed
           </CardTitle>

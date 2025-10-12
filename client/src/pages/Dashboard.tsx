@@ -54,13 +54,17 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold" data-testid="heading-dashboard">Dashboard</h1>
-        <p className="text-sm sm:text-base text-muted-foreground">Monitor your printer status and progress</p>
+    <div className="space-y-4 md:space-y-6 max-w-6xl mx-auto">
+      <div className="space-y-1">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight" data-testid="heading-dashboard">
+          Dashboard
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          Monitor your printer status and progress
+        </p>
       </div>
 
-      <div className="grid gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         <PrinterStatusCard 
           status={getStatus()} 
           printerName={status?.state.text || "Unknown Printer"} 
@@ -79,7 +83,7 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="grid gap-3 sm:gap-4 md:gap-6 lg:grid-cols-2">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 lg:grid-cols-2">
         {job && job.file.name && (
           <PrintProgressCard
             filename={job.file.display || job.file.name}

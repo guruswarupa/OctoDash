@@ -67,16 +67,20 @@ export default function Settings() {
   });
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold" data-testid="heading-settings">Settings</h1>
-        <p className="text-sm sm:text-base text-muted-foreground">Configure OctoPrint connection and preferences</p>
+    <div className="space-y-4 md:space-y-6 max-w-4xl mx-auto">
+      <div className="space-y-1">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight" data-testid="heading-settings">
+          Settings
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          Configure OctoPrint connection and preferences
+        </p>
       </div>
 
-      <div className="space-y-4 sm:space-y-6">
+      <div className="space-y-4">
         <Card>
-          <CardHeader>
-            <CardTitle>Connection Settings</CardTitle>
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-lg">Connection Settings</CardTitle>
             <CardDescription>Configure your OctoPrint server connection</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -88,6 +92,7 @@ export default function Settings() {
                 onChange={(e) => setServerUrl(e.target.value)}
                 placeholder="http://localhost:5000"
                 data-testid="input-server-url"
+                className="h-11"
               />
             </div>
             <div className="space-y-2">
@@ -99,9 +104,10 @@ export default function Settings() {
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder="Enter your OctoPrint API key"
                 data-testid="input-api-key"
+                className="h-11"
               />
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between py-2">
               <Label htmlFor="auto-connect">Auto-connect on startup</Label>
               <Switch
                 id="auto-connect"
@@ -114,6 +120,8 @@ export default function Settings() {
               onClick={() => saveMutation.mutate()} 
               disabled={saveMutation.isPending}
               data-testid="button-save-settings"
+              className="w-full sm:w-auto"
+              size="lg"
             >
               {saveMutation.isPending ? "Saving..." : "Save Settings"}
             </Button>
@@ -121,25 +129,25 @@ export default function Settings() {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>System Information</CardTitle>
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-lg">System Information</CardTitle>
             <CardDescription>Raspberry Pi and system details</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Status:</span>
-              <span className="font-mono font-medium">Connected to OctoPrint</span>
+          <CardContent className="space-y-3">
+            <div className="flex justify-between items-center py-1">
+              <span className="text-sm text-muted-foreground">Status:</span>
+              <span className="text-sm font-medium">Connected to OctoPrint</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Interface Version:</span>
-              <span className="font-mono font-medium">1.0.0</span>
+            <div className="flex justify-between items-center py-1">
+              <span className="text-sm text-muted-foreground">Interface Version:</span>
+              <span className="text-sm font-medium">1.0.0</span>
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+          <CardHeader className="space-y-1">
+            <CardTitle className="flex items-center gap-2 text-lg">
               <AlertTriangle className="h-5 w-5" />
               System Commands
             </CardTitle>
