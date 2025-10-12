@@ -10,10 +10,7 @@ import { HorizontalNav } from "@/components/HorizontalNav";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import Dashboard from "@/pages/Dashboard";
 import Control from "@/pages/Control";
-import Temperature from "@/pages/Temperature";
-import Files from "@/pages/Files";
-import Webcam from "@/pages/Webcam";
-import Timelapse from "@/pages/Timelapse";
+import Media from "@/pages/Media";
 import Terminal from "@/pages/Terminal";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/not-found";
@@ -23,10 +20,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Dashboard} />
       <Route path="/control" component={Control} />
-      <Route path="/temperature" component={Temperature} />
-      <Route path="/files" component={Files} />
-      <Route path="/webcam" component={Webcam} />
-      <Route path="/timelapse" component={Timelapse} />
+      <Route path="/media" component={Media} />
       <Route path="/terminal" component={Terminal} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
