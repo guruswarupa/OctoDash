@@ -44,6 +44,15 @@ This application provides a touch-optimized control interface for OctoPrint that
   - Settings (top), Control (left), Dashboard (center), Media (right), Terminal (bottom)
   - Responsive: Icon-only on small screens, full labels on larger screens
   - Visual active indicators with primary color highlights
+<<<<<<< HEAD
+- **Swipeable Interface**: Touch/gesture-based navigation
+  - All 5 pages arranged in physical + pattern on a 3x3 grid
+  - Swipe left/right/up/down to navigate between pages
+  - Directional arrow indicators show available swipe directions
+  - Works with both touch and mouse gestures
+  - 50px threshold for swipe detection
+=======
+>>>>>>> ee0ea9dadc059243022eedd0187432dc36484517
 - **Dark mode optimized**: Primary interface mode with clean visual hierarchy
 - **Touch-first design**: 44px+ touch targets, optimized spacing for mobile and tablet
 - **Responsive layout**: Mobile-first approach with breakpoints (sm:, md:, lg:)
@@ -86,6 +95,11 @@ The interface launches automatically on boot at http://localhost:5000
 ✅ "+" pattern directional navigation (5 main sections)
 ✅ Responsive navigation (icon-only on mobile)
 ✅ Tabbed interfaces for Control (Movement/Temperature) and Media (Files/Camera/Timelapse)
+<<<<<<< HEAD
+✅ Swipeable page layout with touch/mouse gesture navigation
+✅ Directional arrow indicators for intuitive swipe discovery
+=======
+>>>>>>> ee0ea9dadc059243022eedd0187432dc36484517
 
 ## Development
 
