@@ -137,6 +137,13 @@ export class OctoPrintClient {
     return res.data;
   }
 
+  async downloadFile(location: string, path: string): Promise<string> {
+    const res = await this.client.get(`/files/${location}/${path}`, {
+      responseType: 'text',
+    });
+    return res.data;
+  }
+
   // System commands
   async shutdown() {
     await this.client.post("/system/commands/core/shutdown");

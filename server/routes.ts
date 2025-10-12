@@ -185,6 +185,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/files/:location/:path(*)", async (req, res) => {
+    try {
+      const client = getClient();
+      const { location, path } = req.params;
+      const fileContent = await client.downloadFile(location, path);
+      res.setHeader('Content-Type', 'text/plain');
+      res.send(fileContent);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   app.delete("/api/files/:location/:path(*)", async (req, res) => {
     try {
       const client = getClient();
