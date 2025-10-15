@@ -23,51 +23,7 @@ function AppContent() {
     <div className="flex flex-col h-screen w-full">
       <main className="flex-1 overflow-hidden">
         <Switch>
-          <Route path="/" component={() => (
-            <SwipeableLayout>
-              {{
-                gcode: <GCodeViewer />,
-                control: <Control />,
-                dashboard: <Dashboard />,
-                media: <Media />,
-                terminal: <Terminal />,
-              }}
-            </SwipeableLayout>
-          )} />
-          <Route path="/control" component={() => (
-            <SwipeableLayout>
-              {{
-                gcode: <GCodeViewer />,
-                control: <Control />,
-                dashboard: <Dashboard />,
-                media: <Media />,
-                terminal: <Terminal />,
-              }}
-            </SwipeableLayout>
-          )} />
-          <Route path="/media" component={() => (
-            <SwipeableLayout>
-              {{
-                gcode: <GCodeViewer />,
-                control: <Control />,
-                dashboard: <Dashboard />,
-                media: <Media />,
-                terminal: <Terminal />,
-              }}
-            </SwipeableLayout>
-          )} />
-          <Route path="/gcode" component={() => (
-            <SwipeableLayout>
-              {{
-                gcode: <GCodeViewer />,
-                control: <Control />,
-                dashboard: <Dashboard />,
-                media: <Media />,
-                terminal: <Terminal />,
-              }}
-            </SwipeableLayout>
-          )} />
-          <Route path="/terminal" component={() => (
+          <Route path="/:page?" component={({ params }) => (
             <SwipeableLayout>
               {{
                 gcode: <GCodeViewer />,

@@ -1,9 +1,9 @@
-"use client";
 import { Card } from "@/components/ui/card";
 import { useWebSocket } from "@/contexts/WebSocketContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Box } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { GCodeViewer as ReactGCodeViewer } from "react-gcode-viewer";
 
 export default function GCodeViewer() {
   const { job, progress } = useWebSocket();
@@ -11,16 +11,12 @@ export default function GCodeViewer() {
   const [isLoading, setIsLoading] = useState(false);
   const [gcodeText, setGcodeText] = useState<string | null>(null);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Get the current G-code file URL from the job
   const gcodeUrl = job?.file?.name 
     ? `/api/files/local/${encodeURIComponent(job.file.name)}`
     : null;
 
   const completionPercentage = progress?.completion || 0;
 
-  // Fetch the raw G-code file
   useEffect(() => {
     if (gcodeUrl) {
       setError(null);
@@ -53,20 +49,6 @@ export default function GCodeViewer() {
     }
   }, [gcodeUrl]);
 
-  // Initialize gcode-viewer when G-code text is ready
-  useEffect(() => {
-    if (gcodeText && containerRef.current) {
-      import("gcode-viewer").then((GCodeViewer) => {
-        const viewer = new GCodeViewer.default(containerRef.current, {
-          width: containerRef.current.clientWidth,
-          height: containerRef.current.clientHeight,
-          showAxes: true,
-        });
-        viewer.loadGCode(gcodeText);
-      }).catch(err => setError("Failed to initialize G-code viewer"));
-    }
-  }, [gcodeText]);
-
   return (
     <div className="h-full w-full flex flex-col space-y-4 max-w-6xl mx-auto">
       <div className="space-y-1">
@@ -93,7 +75,19 @@ export default function GCodeViewer() {
             </Alert>
           </div>
         ) : gcodeText ? (
-          <div ref={containerRef} className="w-full h-full" />
+          <div className="w-full h-full">
+            <ReactGCodeViewer 
+              orbitControls 
+              showAxes 
+              quality={2}
+              url={`data:text/plain;base64,${btoa(gcodeText)}`}
+              style={{ 
+                width: '100%', 
+                height: '100%',
+                background: 'transparent'
+              }}
+            />
+          </div>
         ) : isLoading ? (
           <div className="h-full w-full flex items-center justify-center text-muted-foreground">
             <div className="text-center">
