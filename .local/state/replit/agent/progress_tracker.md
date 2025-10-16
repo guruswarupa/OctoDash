@@ -34,3 +34,8 @@
 [x] 34. Fixed race condition preventing viewer from validating data before render
 [x] 35. Added three-state validation (loading/valid/error) to prevent NaN errors
 [x] 36. Added G-code content validation (checks for empty or JSON responses)
+[x] 37. Re-installed tsx package to fix "tsx: not found" server startup error
+[x] 38. Fixed G-code viewer quality parameter from 2 to 0.8 (resolved Three.js "quality must be between 0 and 1" error)
+[x] 39. Corrected server port default from 4000 to 5000 in server/index.ts
+[x] 40. Verified server is running and responding on port 5000
+[x] 41. Fixed tab state reset issue by memoizing page components in App.tsx (prevents Control page remounting on WebSocket updates)

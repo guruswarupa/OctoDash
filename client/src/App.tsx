@@ -15,23 +15,26 @@ import Media from "@/pages/Media";
 import Terminal from "@/pages/Terminal";
 import GCodeViewer from "@/pages/GCodeViewer";
 import NotFound from "@/pages/not-found";
+import { useMemo } from "react";
 
 function AppContent() {
   const { isConnected } = useWebSocket();
+
+  const pages = useMemo(() => ({
+    gcode: <GCodeViewer />,
+    control: <Control />,
+    dashboard: <Dashboard />,
+    media: <Media />,
+    terminal: <Terminal />,
+  }), []);
 
   return (
     <div className="flex flex-col h-screen w-full">
       <main className="flex-1 overflow-hidden">
         <Switch>
-          <Route path="/:page?" component={({ params }) => (
+          <Route path="/:page?" component={() => (
             <SwipeableLayout>
-              {{
-                gcode: <GCodeViewer />,
-                control: <Control />,
-                dashboard: <Dashboard />,
-                media: <Media />,
-                terminal: <Terminal />,
-              }}
+              {pages}
             </SwipeableLayout>
           )} />
           <Route component={NotFound} />
