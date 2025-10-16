@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { useWebSocket } from "@/contexts/WebSocketContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Box } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { GCodeViewer as ReactGCodeViewer } from "react-gcode-viewer";
 
 export default function GCodeViewer() {
@@ -10,18 +10,20 @@ export default function GCodeViewer() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [gcodeText, setGcodeText] = useState<string | null>(null);
+  const lastFetchedFile = useRef<string | null>(null);
 
-  const gcodeUrl = job?.file?.name 
-    ? `/api/files/local/${encodeURIComponent(job.file.name)}`
-    : null;
-
+  const fileName = job?.file?.name || null;
   const completionPercentage = progress?.completion || 0;
 
   useEffect(() => {
-    if (gcodeUrl) {
+    // Only fetch if the file name has actually changed
+    if (fileName && fileName !== lastFetchedFile.current) {
+      lastFetchedFile.current = fileName;
       setError(null);
       setGcodeText(null);
       setIsLoading(true);
+
+      const gcodeUrl = `/api/files/local/${encodeURIComponent(fileName)}`;
 
       fetch(gcodeUrl)
         .then(res => {
@@ -42,12 +44,13 @@ export default function GCodeViewer() {
           setGcodeText(null);
           setIsLoading(false);
         });
-    } else {
+    } else if (!fileName && lastFetchedFile.current) {
+      lastFetchedFile.current = null;
       setGcodeText(null);
       setError(null);
       setIsLoading(false);
     }
-  }, [gcodeUrl]);
+  }, [fileName]);
 
   return (
     <div className="h-full w-full flex flex-col space-y-4 max-w-6xl mx-auto">
@@ -75,7 +78,7 @@ export default function GCodeViewer() {
             </Alert>
           </div>
         ) : gcodeText ? (
-          <div className="w-full h-full">
+          <div className="w-full h-full" key={fileName}>
             <ReactGCodeViewer 
               orbitControls 
               showAxes 
@@ -85,6 +88,10 @@ export default function GCodeViewer() {
                 width: '100%', 
                 height: '100%',
                 background: 'transparent'
+              }}
+              onError={(error) => {
+                console.error("G-code viewer error:", error);
+                setError("Failed to render 3D model. The G-code file may be invalid.");
               }}
             />
           </div>

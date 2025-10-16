@@ -1,0 +1,80 @@
+THREE.WebGLRenderer: Context Lost.
+index-Cn0lzvDB.js:302 THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. Dd
+computeBoundingSphere @ index-Cn0lzvDB.js:302
+index-Cn0lzvDB.js:4137 THREE.WebGLRenderer: Context Lost.
+index-Cn0lzvDB.js:302 THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. Dd
+computeBoundingSphere @ index-Cn0lzvDB.js:302
+2index-Cn0lzvDB.js:4137 THREE.WebGLRenderer: Context Lost.
+index-Cn0lzvDB.js:302 THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. Dd
+computeBoundingSphere @ index-Cn0lzvDB.js:302
+index-Cn0lzvDB.js:302 THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. Dd
+computeBoundingSphere @ index-Cn0lzvDB.js:302
+index-Cn0lzvDB.js:4137 THREE.WebGLRenderer: Context Lost.
+index-Cn0lzvDB.js:302 THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. Dd
+computeBoundingSphere @ index-Cn0lzvDB.js:302
+index-Cn0lzvDB.js:4137 THREE.WebGLRenderer: Context Lost.
+index-Cn0lzvDB.js:302 THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. Dd
+computeBoundingSphere @ index-Cn0lzvDB.js:302
+index-Cn0lzvDB.js:4137 THREE.WebGLRenderer: Context Lost.
+index-Cn0lzvDB.js:302 THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. Dd {isBufferGeometry: true, uuid: '637dc49c-4de9-40f9-8381-c0841430b477', name: '', type: 'PlaneGeometry', index: ZE, …}
+computeBoundingSphere @ index-Cn0lzvDB.js:302
+intersectsObject @ index-Cn0lzvDB.js:341
+wc @ index-Cn0lzvDB.js:4137
+wc @ index-Cn0lzvDB.js:4137
+wc @ index-Cn0lzvDB.js:4137
+RU.render @ index-Cn0lzvDB.js:4137
+XS @ index-Cn0lzvDB.js:4171
+s @ index-Cn0lzvDB.js:4171
+requestAnimationFrame
+s @ index-Cn0lzvDB.js:4171
+requestAnimationFrame
+s @ index-Cn0lzvDB.js:4171
+requestAnimationFrame
+s @ index-Cn0lzvDB.js:4171
+requestAnimationFrame
+o @ index-Cn0lzvDB.js:4171
+(anonymous) @ index-Cn0lzvDB.js:4171
+(anonymous) @ index-Cn0lzvDB.js:4145
+r @ index-Cn0lzvDB.js:4145
+(anonymous) @ index-Cn0lzvDB.js:4171
+Kd @ index-Cn0lzvDB.js:4167
+HT @ index-Cn0lzvDB.js:4167
+VT @ index-Cn0lzvDB.js:4167
+xz @ index-Cn0lzvDB.js:4167
+Ez @ index-Cn0lzvDB.js:4167
+ul @ index-Cn0lzvDB.js:4167
+XT @ index-Cn0lzvDB.js:4167
+A @ index-Cn0lzvDB.js:4153
+V @ index-Cn0lzvDB.js:4153
+index-Cn0lzvDB.js:4137 THREE.WebGLRenderer: Context Lost.
+index-Cn0lzvDB.js:302 THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values. Dd {isBufferGeometry: true, uuid: '1e121cef-e3a4-4df1-ae69-e5c969e8670c', name: '', type: 'PlaneGeometry', index: ZE, …}
+computeBoundingSphere @ index-Cn0lzvDB.js:302
+intersectsObject @ index-Cn0lzvDB.js:341
+wc @ index-Cn0lzvDB.js:4137
+wc @ index-Cn0lzvDB.js:4137
+wc @ index-Cn0lzvDB.js:4137
+RU.render @ index-Cn0lzvDB.js:4137
+XS @ index-Cn0lzvDB.js:4171
+s @ index-Cn0lzvDB.js:4171
+requestAnimationFrame
+s @ index-Cn0lzvDB.js:4171
+requestAnimationFrame
+s @ index-Cn0lzvDB.js:4171
+requestAnimationFrame
+s @ index-Cn0lzvDB.js:4171
+requestAnimationFrame
+o @ index-Cn0lzvDB.js:4171
+(anonymous) @ index-Cn0lzvDB.js:4171
+(anonymous) @ index-Cn0lzvDB.js:4145
+r @ index-Cn0lzvDB.js:4145
+(anonymous) @ index-Cn0lzvDB.js:4171
+Kd @ index-Cn0lzvDB.js:4167
+HT @ index-Cn0lzvDB.js:4167
+VT @ index-Cn0lzvDB.js:4167
+xz @ index-Cn0lzvDB.js:4167
+Ez @ index-Cn0lzvDB.js:4167
+ul @ index-Cn0lzvDB.js:4167
+XT @ index-Cn0lzvDB.js:4167
+A @ index-Cn0lzvDB.js:4153
+V @ index-Cn0lzvDB.js:4153
+index-Cn0lzvDB.js:4137 THREE.WebGLRenderer: Context Lost.

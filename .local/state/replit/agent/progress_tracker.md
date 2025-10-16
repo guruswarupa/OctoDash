@@ -39,3 +39,6 @@
 [x] 39. Corrected server port default from 4000 to 5000 in server/index.ts
 [x] 40. Verified server is running and responding on port 5000
 [x] 41. Fixed tab state reset issue by memoizing page components in App.tsx (prevents Control page remounting on WebSocket updates)
+[x] 42. Fixed repeated G-code file fetching by tracking last fetched file with useRef (prevents 304 requests every 2 seconds)
+[x] 43. Added key prop to G-code viewer to force remount on file change (helps prevent WebGL context loss)
+[x] 44. Added error handler to G-code viewer for better Three.js error recovery
