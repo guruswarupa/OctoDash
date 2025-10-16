@@ -44,3 +44,6 @@
 [x] 44. Added error handler to G-code viewer for better Three.js error recovery
 [x] 45. Re-installed tsx package to fix server startup
 [x] 46. Fixed component remounting issue by wrapping pages with React.memo and memoizing pages object (prevents tab state reset and G-code viewer refresh on WebSocket updates)
+[x] 47. Fixed server port configuration from 4000 to 5000 in server/index.ts
+[x] 48. Fixed infinite recursive loop by changing OctoPrint URL default from localhost:5000 to localhost:8080 (was causing server to proxy to itself)
+[x] 49. Fixed tab state reset by removing unused useWebSocket() call from AppContent that was causing entire app to re-render every 2 seconds

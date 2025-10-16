@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { ConnectionStatus } from "@/components/ConnectionStatus";
 import { HorizontalNav } from "@/components/HorizontalNav";
 import { SwipeableLayout } from "@/components/SwipeableLayout";
-import { WebSocketProvider, useWebSocket } from "@/contexts/WebSocketContext";
+import { WebSocketProvider } from "@/contexts/WebSocketContext";
 import Dashboard from "@/pages/Dashboard";
 import Control from "@/pages/Control";
 import Media from "@/pages/Media";
@@ -24,8 +24,6 @@ const MemoizedTerminal = memo(Terminal);
 const MemoizedGCodeViewer = memo(GCodeViewer);
 
 function AppContent() {
-  const { isConnected } = useWebSocket();
-
   const pages = useMemo(() => ({
     gcode: <MemoizedGCodeViewer />,
     control: <MemoizedControl />,
