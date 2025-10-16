@@ -42,3 +42,5 @@
 [x] 42. Fixed repeated G-code file fetching by tracking last fetched file with useRef (prevents 304 requests every 2 seconds)
 [x] 43. Added key prop to G-code viewer to force remount on file change (helps prevent WebGL context loss)
 [x] 44. Added error handler to G-code viewer for better Three.js error recovery
+[x] 45. Re-installed tsx package to fix server startup
+[x] 46. Fixed component remounting issue by wrapping pages with React.memo and memoizing pages object (prevents tab state reset and G-code viewer refresh on WebSocket updates)

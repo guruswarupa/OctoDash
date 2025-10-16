@@ -15,17 +15,23 @@ import Media from "@/pages/Media";
 import Terminal from "@/pages/Terminal";
 import GCodeViewer from "@/pages/GCodeViewer";
 import NotFound from "@/pages/not-found";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
+
+const MemoizedDashboard = memo(Dashboard);
+const MemoizedControl = memo(Control);
+const MemoizedMedia = memo(Media);
+const MemoizedTerminal = memo(Terminal);
+const MemoizedGCodeViewer = memo(GCodeViewer);
 
 function AppContent() {
   const { isConnected } = useWebSocket();
 
   const pages = useMemo(() => ({
-    gcode: <GCodeViewer />,
-    control: <Control />,
-    dashboard: <Dashboard />,
-    media: <Media />,
-    terminal: <Terminal />,
+    gcode: <MemoizedGCodeViewer />,
+    control: <MemoizedControl />,
+    dashboard: <MemoizedDashboard />,
+    media: <MemoizedMedia />,
+    terminal: <MemoizedTerminal />,
   }), []);
 
   return (
