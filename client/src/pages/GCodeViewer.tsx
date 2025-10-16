@@ -79,7 +79,7 @@ export default function GCodeViewer() {
             <ReactGCodeViewer 
               orbitControls 
               showAxes 
-              quality={2}
+              quality={0.8}
               url={`data:text/plain;base64,${btoa(gcodeText)}`}
               style={{ 
                 width: '100%', 
