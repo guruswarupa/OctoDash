@@ -35,7 +35,7 @@ This application provides a touch-optimized control interface for OctoPrint that
   - **Control** (left) - Movement controls + Temperature management (tabbed)
   - **Media** (right) - Files, Camera, and Timelapse (tabbed)
   - **Terminal** (bottom) - G-code terminal
-  - **GCodeViewer** (top) - 3D G-code visualization using react-gcode-viewer
+  - **GCodeViewer** (top) - 3D G-code visualization with live layer-based coloring using gcode-preview
 - `components/SwipeableLayout.tsx` - Swipeable "+" pattern navigation with CSS Grid layout
 - `components/SettingsDialog.tsx` - Settings modal accessible from Dashboard
 - `components/` - Reusable UI components
@@ -95,7 +95,10 @@ The interface launches automatically on boot at http://localhost:5000
 ✅ Tabbed interfaces for Control (Movement/Temperature) and Media (Files/Camera/Timelapse)
 ✅ Swipeable page layout with touch/mouse gesture navigation
 ✅ Directional arrow indicators showing destination page names
-✅ 3D G-code viewer using react-gcode-viewer library
+✅ 3D G-code viewer with live layer visualization using gcode-preview library
+✅ Live layer coloring based on print progress (green=printed, orange=current, gray=remaining)
+✅ DisplayLayerProgress plugin integration for real-time layer tracking
+✅ Layer info overlay showing current layer, total layers, and color legend
 ✅ Settings dialog accessible via Dashboard button
 
 ## Development

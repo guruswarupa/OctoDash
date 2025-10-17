@@ -27,7 +27,7 @@ export class FileStorage implements IStorage {
     } catch (error) {
       // File doesn't exist or is invalid, use environment variables as default
       this.settings = {
-        serverUrl: process.env.OCTOPRINT_URL || "http://localhost:5000",
+        serverUrl: process.env.OCTOPRINT_URL || "http://localhost:8080",
         apiKey: process.env.OCTOPRINT_API_KEY || "",
       };
       return this.settings;

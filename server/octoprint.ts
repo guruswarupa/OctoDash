@@ -203,4 +203,15 @@ export class OctoPrintClient {
     const res = await this.client.get("/settings");
     return res.data;
   }
+
+  // DisplayLayerProgress plugin - get current layer information
+  async getLayerProgress() {
+    try {
+      const res = await this.client.get("/plugin/DisplayLayerProgress/values");
+      return res.data;
+    } catch (error) {
+      // Plugin not installed or not available
+      return null;
+    }
+  }
 }

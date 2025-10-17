@@ -1,22 +1,28 @@
 import { Card } from "@/components/ui/card";
 import { useWebSocket } from "@/contexts/WebSocketContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Box } from "lucide-react";
-import { useState, useEffect, useMemo, useRef } from "react";
-import { GCodeViewer as ReactGCodeViewer } from "react-gcode-viewer";
+import { AlertCircle, Box, Layers } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { WebGLPreview } from 'gcode-preview';
 
 export default function GCodeViewer() {
-  const { job, progress } = useWebSocket();
+  const { job, progress, layerData } = useWebSocket();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [gcodeText, setGcodeText] = useState<string | null>(null);
   const lastFetchedFile = useRef<string | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const previewRef = useRef<WebGLPreview | null>(null);
 
   const fileName = job?.file?.name || null;
   const completionPercentage = progress?.completion || 0;
+  
+  // Get current layer from DisplayLayerProgress plugin
+  const currentLayer = layerData?.layer?.current ? parseInt(layerData.layer.current) : 0;
+  const totalLayers = layerData?.layer?.total ? parseInt(layerData.layer.total) : 0;
 
+  // Fetch G-code file when file changes
   useEffect(() => {
-    // Only fetch if the file name has actually changed
     if (fileName && fileName !== lastFetchedFile.current) {
       lastFetchedFile.current = fileName;
       setError(null);
@@ -52,6 +58,63 @@ export default function GCodeViewer() {
     }
   }, [fileName]);
 
+  // Initialize and render G-code preview with layer coloring
+  useEffect(() => {
+    if (!canvasRef.current || !gcodeText) return;
+
+    try {
+      // Clean up previous preview
+      if (previewRef.current) {
+        previewRef.current.clear();
+        previewRef.current = null;
+      }
+
+      // Create new preview with layer-based coloring
+      const preview = new WebGLPreview({
+        canvas: canvasRef.current,
+        
+        // Color function based on current layer
+        extrusionColor: (layer: number) => {
+          if (currentLayer === 0) {
+            // No layer info available, use default color
+            return '#0ea5e9'; // Sky blue
+          }
+          
+          if (layer < currentLayer) {
+            // Already printed - green
+            return '#22c55e';
+          } else if (layer === currentLayer) {
+            // Currently printing - orange
+            return '#f59e0b';
+          } else {
+            // Not yet printed - gray
+            return '#9ca3af';
+          }
+        },
+        
+        buildVolume: { x: 220, y: 220, z: 250 },
+        initialCameraPosition: [0, 400, 450],
+        allowDragNDrop: false,
+      });
+
+      // Process and render G-code
+      preview.processGCode(gcodeText);
+      
+      previewRef.current = preview;
+      
+    } catch (err) {
+      console.error("G-code preview error:", err);
+      setError("Failed to render 3D model. The G-code file may be invalid.");
+    }
+
+    return () => {
+      if (previewRef.current) {
+        previewRef.current.clear();
+        previewRef.current = null;
+      }
+    };
+  }, [gcodeText, currentLayer]);
+
   return (
     <div className="h-full w-full flex flex-col space-y-4 max-w-6xl mx-auto">
       <div className="space-y-1">
@@ -78,22 +141,38 @@ export default function GCodeViewer() {
             </Alert>
           </div>
         ) : gcodeText ? (
-          <div className="w-full h-full" key={fileName}>
-            <ReactGCodeViewer 
-              orbitControls 
-              showAxes 
-              quality={0.8}
-              url={`data:text/plain;base64,${btoa(gcodeText)}`}
-              style={{ 
-                width: '100%', 
-                height: '100%',
-                background: 'transparent'
-              }}
-              onError={(error) => {
-                console.error("G-code viewer error:", error);
-                setError("Failed to render 3D model. The G-code file may be invalid.");
-              }}
+          <div className="w-full h-full relative">
+            <canvas 
+              ref={canvasRef}
+              className="w-full h-full"
+              data-testid="canvas-gcode-preview"
             />
+            
+            {/* Layer info overlay */}
+            {totalLayers > 0 && (
+              <div className="absolute top-4 left-4 bg-background/80 backdrop-blur-sm border rounded-md p-3 space-y-1">
+                <div className="flex items-center gap-2">
+                  <Layers className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">
+                    Layer {currentLayer} / {totalLayers}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 text-xs">
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-sm bg-[#22c55e]" />
+                    <span className="text-muted-foreground">Printed</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-sm bg-[#f59e0b]" />
+                    <span className="text-muted-foreground">Current</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-sm bg-[#9ca3af]" />
+                    <span className="text-muted-foreground">Remaining</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         ) : isLoading ? (
           <div className="h-full w-full flex items-center justify-center text-muted-foreground">
@@ -116,8 +195,11 @@ export default function GCodeViewer() {
       </Card>
 
       {gcodeText && !error && (
-        <div className="text-sm text-muted-foreground text-center">
-          Print Progress: {completionPercentage.toFixed(1)}%
+        <div className="text-sm text-muted-foreground text-center space-y-1">
+          <p>Print Progress: {completionPercentage.toFixed(1)}%</p>
+          {layerData?.height?.current && (
+            <p>Current Height: {layerData.height.currentFormatted || layerData.height.current}mm</p>
+          )}
         </div>
       )}
     </div>

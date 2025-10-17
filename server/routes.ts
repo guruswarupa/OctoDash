@@ -43,14 +43,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!octoprintClient) return;
 
       try {
-        const [status, job] = await Promise.all([
+        const [status, job, layerData] = await Promise.all([
           octoprintClient.getPrinterStatus(),
           octoprintClient.getJob(),
+          octoprintClient.getLayerProgress(),
         ]);
 
         ws.send(JSON.stringify({
           type: "update",
-          data: { status, job },
+          data: { status, job, layerData },
         }));
       } catch (error) {
         console.error("Error fetching printer data:", error);

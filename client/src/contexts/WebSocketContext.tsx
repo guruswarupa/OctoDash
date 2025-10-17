@@ -1,10 +1,11 @@
 import { createContext, useContext, useEffect, useState, useRef, ReactNode } from "react";
-import type { PrinterStatus, Job, JobProgress } from "@shared/schema";
+import type { PrinterStatus, Job, JobProgress, LayerData } from "@shared/schema";
 
 interface WebSocketData {
   status: PrinterStatus | null;
   job: Job | null;
   progress: JobProgress | null;
+  layerData: LayerData | null;
   isConnected: boolean;
 }
 
@@ -12,6 +13,7 @@ const WebSocketContext = createContext<WebSocketData>({
   status: null,
   job: null,
   progress: null,
+  layerData: null,
   isConnected: false,
 });
 
@@ -28,6 +30,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     status: null,
     job: null,
     progress: null,
+    layerData: null,
     isConnected: false,
   });
   const wsRef = useRef<WebSocket | null>(null);
@@ -52,6 +55,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
               status: message.data.status,
               job: message.data.job.job,
               progress: message.data.job.progress,
+              layerData: message.data.layerData || null,
             }));
           }
         } catch (error) {

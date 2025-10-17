@@ -30,6 +30,28 @@ export const jobProgressSchema = z.object({
   printTimeLeft: z.number().nullable(),
 });
 
+export const layerProgressSchema = z.object({
+  current: z.string().nullable(),
+  total: z.string().nullable(),
+  averageLayerDuration: z.string().nullable(),
+  averageLayerDurationInSeconds: z.number().nullable(),
+  lastLayerDuration: z.string().nullable(),
+  lastLayerDurationInSeconds: z.number().nullable(),
+});
+
+export const layerDataSchema = z.object({
+  currentFilename: z.string().nullable(),
+  layer: layerProgressSchema.nullable(),
+  height: z.object({
+    current: z.string().nullable(),
+    currentFormatted: z.string().nullable(),
+    total: z.string().nullable(),
+    totalFormatted: z.string().nullable(),
+  }).nullable(),
+  progress: z.string().nullable(),
+  printerState: z.string().nullable(),
+});
+
 export const jobFileSchema = z.object({
   name: z.string().nullable(),
   path: z.string().nullable(),
@@ -96,3 +118,5 @@ export type File = z.infer<typeof fileSchema>;
 export type FilesResponse = z.infer<typeof filesResponseSchema>;
 export type ConnectionSettings = z.infer<typeof connectionSettingsSchema>;
 export type PrinterStatus = z.infer<typeof printerStatusSchema>;
+export type LayerProgress = z.infer<typeof layerProgressSchema>;
+export type LayerData = z.infer<typeof layerDataSchema>;
