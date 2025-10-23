@@ -146,7 +146,10 @@ export default function Timelapse() {
                       <Button
                         variant="outline"
                         size="icon"
-                        onClick={() => window.open(file.url, "_blank")}
+                        onClick={() => {
+                          const fixedUrl = file.url.replace(/^https?:\/\/[^/]+/, window.location.origin);
+                          window.open(fixedUrl, "_blank");
+                        }}
                         data-testid={`button-download-${file.name}`}
                       >
                         <Download className="h-4 w-4" />
