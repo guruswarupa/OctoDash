@@ -147,7 +147,8 @@ export default function Timelapse() {
                         variant="outline"
                         size="icon"
                         onClick={() => {
-                          const fixedUrl = file.url.replace(/^https?:\/\/[^/]+/, window.location.origin);
+                          const originWithoutPort = `${window.location.protocol}//${window.location.hostname}`;
+                          const fixedUrl = file.url.replace(/^https?:\/\/[^/]+/, originWithoutPort);
                           window.open(fixedUrl, "_blank");
                         }}
                         data-testid={`button-download-${file.name}`}

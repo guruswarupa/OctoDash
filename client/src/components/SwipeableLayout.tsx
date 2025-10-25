@@ -1,7 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
 import { useLocation } from "wouter";
 import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface SwipeableLayoutProps {
   children: {
@@ -24,9 +23,6 @@ const pageRoutes = {
 export function SwipeableLayout({ children }: SwipeableLayoutProps) {
   const [location, setLocation] = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   // Calculate position based on current route
   const getPositionForRoute = (route: string) => {
@@ -57,125 +53,67 @@ export function SwipeableLayout({ children }: SwipeableLayoutProps) {
     "/terminal": "Terminal",
   };
 
-  // Handle touch start
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setIsDragging(true);
-    setStartPos({
-      x: e.touches[0].clientX,
-      y: e.touches[0].clientY,
-    });
-  };
-
-  // Handle touch move
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
-
-    const deltaX = e.touches[0].clientX - startPos.x;
-    const deltaY = e.touches[0].clientY - startPos.y;
-
-    setOffset({ x: deltaX, y: deltaY });
-  };
-
-  // Handle touch end
-  const handleTouchEnd = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
-
-    const threshold = 50; // minimum swipe distance
-
-    // Determine swipe direction (inverted: swipe left shows right page, etc.)
-    if (Math.abs(offset.x) > Math.abs(offset.y)) {
-      // Horizontal swipe
-      if (offset.x > threshold && currentNeighbors.left) {
-        setLocation(currentNeighbors.left);
-      } else if (offset.x < -threshold && currentNeighbors.right) {
-        setLocation(currentNeighbors.right);
-      }
-    } else {
-      // Vertical swipe
-      if (offset.y > threshold && currentNeighbors.up) {
-        setLocation(currentNeighbors.up);
-      } else if (offset.y < -threshold && currentNeighbors.down) {
-        setLocation(currentNeighbors.down);
-      }
-    }
-
-    setOffset({ x: 0, y: 0 });
-  };
-
-  // Handle mouse events for desktop
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    setStartPos({ x: e.clientX, y: e.clientY });
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    const deltaX = e.clientX - startPos.x;
-    const deltaY = e.clientY - startPos.y;
-    setOffset({ x: deltaX, y: deltaY });
-  };
-
-  const handleMouseUp = () => {
-    if (!isDragging) return;
-    handleTouchEnd();
-  };
-
   return (
     <div className="relative w-full h-full overflow-hidden">
-      {/* Navigation Arrows */}
+      {/* Navigation Arrow Buttons */}
       <div className="absolute inset-0 pointer-events-none z-20">
         {currentNeighbors.up && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2">
-            <div className="flex flex-col items-center gap-1 text-muted-foreground/40">
-              <ArrowUp className="h-6 w-6 animate-bounce" />
-              <span className="text-xs hidden sm:inline">{pageNames[currentNeighbors.up]}</span>
+          <button
+            onClick={() => setLocation(currentNeighbors.up!)}
+            className="absolute top-4 left-1/2 -translate-x-1/2 pointer-events-auto bg-background/80 hover:bg-background border border-border rounded-lg px-3 py-2 transition-all hover:scale-110 active:scale-95 shadow-lg"
+            aria-label={`Navigate to ${pageNames[currentNeighbors.up]}`}
+          >
+            <div className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground">
+              <ArrowUp className="h-6 w-6" />
+              <span className="text-xs hidden sm:inline font-medium">{pageNames[currentNeighbors.up]}</span>
             </div>
-          </div>
+          </button>
         )}
         {currentNeighbors.down && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-            <div className="flex flex-col items-center gap-1 text-muted-foreground/40">
-              <span className="text-xs hidden sm:inline">{pageNames[currentNeighbors.down]}</span>
-              <ArrowDown className="h-6 w-6 animate-bounce" />
+          <button
+            onClick={() => setLocation(currentNeighbors.down!)}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-auto bg-background/80 hover:bg-background border border-border rounded-lg px-3 py-2 transition-all hover:scale-110 active:scale-95 shadow-lg"
+            aria-label={`Navigate to ${pageNames[currentNeighbors.down]}`}
+          >
+            <div className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground">
+              <span className="text-xs hidden sm:inline font-medium">{pageNames[currentNeighbors.down]}</span>
+              <ArrowDown className="h-6 w-6" />
             </div>
-          </div>
+          </button>
         )}
         {currentNeighbors.left && (
-          <div className="absolute left-4 top-1/2 -translate-y-1/2">
-            <div className="flex items-center gap-1 text-muted-foreground/40">
-              <ArrowLeft className="h-6 w-6 animate-pulse" />
-              <span className="text-xs hidden sm:inline">{pageNames[currentNeighbors.left]}</span>
+          <button
+            onClick={() => setLocation(currentNeighbors.left!)}
+            className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-auto bg-background/80 hover:bg-background border border-border rounded-lg px-3 py-2 transition-all hover:scale-110 active:scale-95 shadow-lg"
+            aria-label={`Navigate to ${pageNames[currentNeighbors.left]}`}
+          >
+            <div className="flex items-center gap-1 text-muted-foreground hover:text-foreground">
+              <ArrowLeft className="h-6 w-6" />
+              <span className="text-xs hidden sm:inline font-medium">{pageNames[currentNeighbors.left]}</span>
             </div>
-          </div>
+          </button>
         )}
         {currentNeighbors.right && (
-          <div className="absolute right-4 top-1/2 -translate-y-1/2">
-            <div className="flex items-center gap-1 text-muted-foreground/40">
-              <span className="text-xs hidden sm:inline">{pageNames[currentNeighbors.right]}</span>
-              <ArrowRight className="h-6 w-6 animate-pulse" />
+          <button
+            onClick={() => setLocation(currentNeighbors.right!)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-auto bg-background/80 hover:bg-background border border-border rounded-lg px-3 py-2 transition-all hover:scale-110 active:scale-95 shadow-lg"
+            aria-label={`Navigate to ${pageNames[currentNeighbors.right]}`}
+          >
+            <div className="flex items-center gap-1 text-muted-foreground hover:text-foreground">
+              <span className="text-xs hidden sm:inline font-medium">{pageNames[currentNeighbors.right]}</span>
+              <ArrowRight className="h-6 w-6" />
             </div>
-          </div>
+          </button>
         )}
       </div>
 
-      {/* Swipeable Grid Container */}
+      {/* Grid Container */}
       <div
         ref={containerRef}
-        className={cn(
-          "grid grid-cols-3 grid-rows-3 w-[300vw] h-[300vh] transition-transform duration-300",
-          isDragging && "transition-none"
-        )}
+        className="grid grid-cols-3 grid-rows-3 w-[300vw] h-[300vh] transition-transform duration-300"
         style={{
-          transform: `translate(calc(-${currentPos.col - 1} * 100vw + ${offset.x}px), calc(-${currentPos.row - 1} * 100vh + ${offset.y}px))`,
+          transform: `translate(calc(-${currentPos.col - 1} * 100vw), calc(-${currentPos.row - 1} * 100vh))`,
         }}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
       >
         {/* Empty cells */}
         <div className="w-screen h-screen" />
