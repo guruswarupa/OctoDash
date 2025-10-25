@@ -189,12 +189,12 @@ export class OctoPrintClient {
   }
 
   async getTimelapseConfig() {
-    const res = await this.client.get("/timelapse/config");
-    return res.data;
+    const res = await this.client.get("/timelapse");
+    return res.data.config || {};
   }
 
   async setTimelapseConfig(config: any) {
-    const res = await this.client.post("/timelapse/config", config);
+    const res = await this.client.post("/timelapse", config);
     return res.data;
   }
 
