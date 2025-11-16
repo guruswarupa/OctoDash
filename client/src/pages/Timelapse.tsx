@@ -147,9 +147,19 @@ export default function Timelapse() {
                         variant="outline"
                         size="icon"
                         onClick={() => {
-                          const originWithoutPort = `${window.location.protocol}//${window.location.hostname}`;
-                          const fixedUrl = file.url.replace(/^https?:\/\/[^/]+/, originWithoutPort);
-                          window.open(fixedUrl, "_blank");
+                          try {
+                            // Build a URL object and force current hostname (no port)
+                            const u = new URL(file.url, window.location.href);
+                            u.hostname = window.location.hostname;
+                            u.port = "";
+                            u.protocol = window.location.protocol;
+                            window.open(u.toString(), "_blank");
+                          } catch {
+                            // Fallback: strip host part and use current origin without port
+                            const originWithoutPort = `${window.location.protocol}//${window.location.hostname}`;
+                            const path = file.url.replace(/^https?:\/\/[^/]+/, "");
+                            window.open(originWithoutPort + path, "_blank");
+                          }
                         }}
                         data-testid={`button-download-${file.name}`}
                       >
